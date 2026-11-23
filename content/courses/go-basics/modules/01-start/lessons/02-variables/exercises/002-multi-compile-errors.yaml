@@ -35,5 +35,6 @@ explanation: |
   나머지 두 보기는 변수를 선언하고 실제로 쓰므로 문제없어요.
 origin: authored
 review:
-  status: draft
+  status: approved
   draftedBy: ai:claude
+  reviewedBy: ai:reviewer

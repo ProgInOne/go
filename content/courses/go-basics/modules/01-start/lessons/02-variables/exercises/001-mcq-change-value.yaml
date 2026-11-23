@@ -6,7 +6,7 @@ concepts:
 tags: [short-declaration, assignment]
 estimatedSeconds: 60
 prompt: |
-  `main` 함수 안에 `score := 10`이 있어요. 바로 다음 줄에서 `score`의 값을 `20`으로 바꾸려면 어떻게 써야 하나요?
+  `main` 함수 안에 `score := 10`이 있고, 아래쪽에서 `fmt.Println(score)`로 `score`를 출력해요. `score := 10` 바로 다음 줄에서 `score`의 값을 `20`으로 바꾸려면 어떻게 써야 하나요?
 spec:
   options:
     - id: a
@@ -20,18 +20,19 @@ spec:
       rationale: 같은 범위에 `score`를 다시 선언하게 되어 `score redeclared in this block` 컴파일 오류가 나요.
     - id: d
       text: '`score == 20`'
-      rationale: '`==`는 두 값이 같은지 비교하는 연산자라 값을 바꾸지 않아요.'
+      rationale: '`==`는 두 값이 같은지 비교하는 연산자라 값을 바꾸지 않아요. 비교 결과를 쓰지 않고 이렇게 한 줄로만 적으면 컴파일 오류도 나요.'
   correct: a
 misconceptions: [go.mc.short-decl-reassigns]
 hints:
   - '`score`는 이미 있는 변수인가요, 새 변수인가요?'
   - '`:=`는 무엇을 만드나요?'
-  - 이미 있는 변수에 값을 넣는 기호는 하나예요.
+  - '`=`, `:=`, `==`가 각각 무엇을 하는지 떠올려 보세요.'
 explanation: |
   정답은 `score = 20`이에요.
 
-  `score`는 이미 선언된 변수라서 `=`로 값을 바꿔요. `:=`나 `var`는 새 변수를 만드는 문법이라 같은 범위에서는 컴파일 오류가 나고, `==`는 비교 연산자예요.
+  `score`는 이미 선언된 변수라서 `=`로 값을 바꿔요. `:=`나 `var`는 새 변수를 만드는 문법이라 같은 범위에서는 컴파일 오류가 나요. `==`는 값을 비교만 하는 연산자라 값이 바뀌지 않고, 결과를 쓰지 않는 한 줄로 적으면 컴파일 오류가 나요.
 origin: authored
 review:
-  status: draft
+  status: approved
   draftedBy: ai:claude
+  reviewedBy: ai:reviewer

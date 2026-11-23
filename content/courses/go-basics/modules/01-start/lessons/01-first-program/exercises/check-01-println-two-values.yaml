@@ -6,7 +6,7 @@ concepts:
   - { id: go.basics.println, weight: 1 }
 tags: [println]
 estimatedSeconds: 40
-prompt: '`fmt.Println("합계:", 3 + 4)`는 무엇을 출력하나요?'
+prompt: '`fmt.Println("합계:", 3+4)`는 무엇을 출력하나요?'
 spec:
   options:
     - id: a
@@ -15,8 +15,8 @@ spec:
       text: '`합계:7`'
       rationale: '`fmt.Println`은 값 사이에 공백을 하나 넣어요.'
     - id: c
-      text: '`합계: 3 + 4`'
-      rationale: 따옴표 밖의 `3 + 4`는 계산된 값 `7`로 출력돼요.
+      text: '`합계: 3+4`'
+      rationale: 따옴표 밖의 `3+4`는 계산된 값 `7`로 출력돼요.
     - id: d
       text: '`"합계:" 7`'
       rationale: 문자열은 따옴표 없이 글자만 출력돼요.
@@ -28,8 +28,9 @@ hints:
 explanation: |
   정답은 `합계: 7`이에요.
 
-  `"합계:"`는 글자 그대로, `3 + 4`는 계산한 `7`로 출력돼요. 값이 두 개라서 사이에 공백이 하나 들어가요.
+  `"합계:"`는 글자 그대로, `3+4`는 계산한 `7`로 출력돼요. 값이 두 개라서 사이에 공백이 하나 들어가요.
 origin: authored
 review:
-  status: draft
+  status: approved
   draftedBy: ai:claude
+  reviewedBy: ai:reviewer

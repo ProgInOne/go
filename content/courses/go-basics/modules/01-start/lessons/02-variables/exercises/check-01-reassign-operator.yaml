@@ -20,5 +20,6 @@ explanation: |
   `:=`는 새 변수를 만들고, 이미 있는 변수의 값은 `=`로 바꿔요.
 origin: authored
 review:
-  status: draft
+  status: approved
   draftedBy: ai:claude
+  reviewedBy: ai:reviewer
