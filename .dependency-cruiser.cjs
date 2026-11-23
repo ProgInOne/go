@@ -13,6 +13,13 @@ module.exports = {
       to: { circular: true },
     },
     {
+      name: 'web-not-to-server',
+      severity: 'error',
+      comment: '웹은 서버 코드를 직접 가져오지 않습니다(타입은 @proginone/shared로 공유).',
+      from: { path: '^apps/web/' },
+      to: { path: '^apps/server/', dependencyTypesNot: ['type-only'] },
+    },
+    {
       name: 'packages-not-to-apps',
       severity: 'error',
       comment: '패키지는 앱에 의존하지 않습니다.',

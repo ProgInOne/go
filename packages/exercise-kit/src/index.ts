@@ -32,4 +32,14 @@ export {
   type ExerciseKitErrorCode,
   type GradeResult,
   type RegisteredExerciseType,
+  // Language-neutral helpers the server uses, re-exported so the apps keep one import.
+  exerciseOriginOf,
+  variantGroupKey,
+  type ExerciseOrigin,
+  hasProtoKey,
+  withinDepth,
+  normalizeLeakText,
+  type McqMultiSpec,
+  type McqSingleSpec,
+  type TrueFalseSpec,
 } from '@proginone/exercise-core';

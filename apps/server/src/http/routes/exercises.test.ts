@@ -1,0 +1,233 @@
+import {
+  apiErrorSchema,
+  exerciseViewSchema,
+  hintResponseSchema,
+  reportResponseSchema,
+  solutionResponseSchema,
+} from '@proginone/shared';
+import { describe, expect, it } from 'vitest';
+import {
+  ANSWER_KEY_FIELDS,
+  ANSWER_MARKERS,
+  BLOCK,
+  EX,
+  FIXTURE_EXERCISES,
+} from '../../test/content-fixture.ts';
+import { count, practiceApp } from '../../test/practice-app.ts';
+
+function keysOf(value: unknown, out = new Set<string>()): Set<string> {
+  if (Array.isArray(value)) for (const v of value) keysOf(v, out);
+  else if (value !== null && typeof value === 'object') {
+    for (const [k, v] of Object.entries(value)) {
+      out.add(k);
+      keysOf(v, out);
+    }
+  }
+  return out;
+}
+
+const errorCode = (json: unknown) => apiErrorSchema.parse(json).error.code;
+
+describe('GET /exercises/:id', () => {
+  it.each(FIXTURE_EXERCISES.map((e) => [e.type, e.id]))(
+    'returns the public view of %s without answer keys',
+    async (_type, id) => {
+      const { call } = await practiceApp();
+      const res = await call('GET', `/exercises/${id}`);
+      expect(res.status).toBe(200);
+      const view = exerciseViewSchema.parse(res.json);
+      expect(view.id).toBe(id);
+      expect(view.hintCount).toBe(3);
+      expect(view.openedHints).toEqual([]);
+      const keys = keysOf(view.publicSpec);
+      for (const field of ANSWER_KEY_FIELDS) expect(keys).not.toContain(field);
+      for (const marker of ANSWER_MARKERS) expect(res.text).not.toContain(marker);
+      expect(res.text).not.toContain('해설'); // explanation only after "정답 보기"
+      expect(res.text).not.toContain('힌트 1'); // hint texts only once opened
+    },
+  );
+
+  it('serves only choice exercises: no run, no writing (G-001)', async () => {
+    const { call } = await practiceApp();
+    for (const { id } of FIXTURE_EXERCISES) {
+      const view = exerciseViewSchema.parse((await call('GET', `/exercises/${id}`)).json);
+      expect(view.requiresRun).toBe(false);
+      expect(view.writing).toBe(false);
+      expect(view.category).toBe('recognition');
+    }
+  });
+
+  it('labels the code with the language of the exercise course', async () => {
+    const { call } = await practiceApp();
+    const view = exerciseViewSchema.parse((await call('GET', `/exercises/${EX.mcq}`)).json);
+    expect(view.codeLanguage).toBe('go');
+  });
+
+  it('answers 404 for unknown or malformed ids and items', async () => {
+    const { call } = await practiceApp();
+    expect((await call('GET', '/exercises/nope.nope.nope.nope')).status).toBe(404);
+    expect((await call('GET', '/exercises/%20bad')).status).toBe(404);
+    const res = await call(
+      'GET',
+      `/exercises/${EX.mcq}?practiceSetItemId=01JD3Z8Q6V2K9M4T7R1X5W0BNC`,
+    );
+    expect(res.status).toBe(404);
+  });
+});
+
+describe('code execution endpoints', () => {
+  it('are not served: the skeleton runs no Go code (G-001)', async () => {
+    const { call } = await practiceApp();
+    const plan = await call('POST', `/exercises/${EX.mcq}/run-plan`, {
+      answer: {},
+      purpose: 'grading',
+    });
+    expect(plan.status).toBe(404);
+    const tryIt = await call('POST', `/exercises/${EX.mcq}/try-attempts`, {
+      answer: {},
+      runResult: {},
+    });
+    expect(tryIt.status).toBe(404);
+  });
+
+  it('rejects oversized bodies', async () => {
+    const { call } = await practiceApp();
+    const res = await call('POST', `/exercises/${EX.mcq}/reports`, {
+      reason: 'unclear',
+      note: 'x'.repeat(1_100_000),
+    });
+    expect(res.status).toBe(413);
+  });
+});
+
+describe('hints and solution', () => {
+  it('opens hint levels 1 to 3 and then refuses', async () => {
+    const ctx = await practiceApp();
+    for (const level of [1, 2, 3]) {
+      const res = await ctx.call('POST', `/exercises/${EX.mcq}/hints`);
+      expect(res.status).toBe(200);
+      expect(hintResponseSchema.parse(res.json)).toEqual({
+        level,
+        text: `힌트 ${level}`,
+        hintCount: 3,
+        remaining: 3 - level,
+      });
+    }
+    const fourth = await ctx.call('POST', `/exercises/${EX.mcq}/hints`, {});
+    expect(fourth.status).toBe(409);
+    expect(errorCode(fourth.json)).toBe('EXERCISE_HINTS_EXHAUSTED');
+    expect(count(ctx, 'hint_events')).toBe(3);
+    const view = exerciseViewSchema.parse((await ctx.call('GET', `/exercises/${EX.mcq}`)).json);
+    expect(view.openedHints.map((h) => h.level)).toEqual([1, 2, 3]);
+  });
+
+  it("waits for one submission under hints.policy 'after-attempt' (JS D-047)", async () => {
+    const ctx = await practiceApp();
+    const patched = await ctx.call('PATCH', '/settings', { 'hints.policy': 'after-attempt' });
+    expect(patched.status).toBe(200);
+    const early = await ctx.call('POST', `/exercises/${BLOCK.checkMcq}/hints`);
+    expect(early.status).toBe(409);
+    expect(errorCode(early.json)).toBe('EXERCISE_TRY_FIRST');
+    expect(count(ctx, 'hint_events')).toBe(0);
+
+    const attempt = await ctx.call('POST', `/exercises/${BLOCK.checkMcq}/inline-attempts`, {
+      answer: { optionId: 'a' },
+      startedAt: ctx.clock.now - 20_000,
+      activeMs: 15_000,
+      confidence: null,
+    });
+    expect(attempt.status).toBe(201);
+    const after = await ctx.call('POST', `/exercises/${BLOCK.checkMcq}/hints`);
+    expect(after.status).toBe(200);
+    expect(hintResponseSchema.parse(after.json).level).toBe(1);
+
+    // Back to standard: no submission needed.
+    await ctx.call('PATCH', '/settings', { 'hints.policy': 'standard' });
+    expect((await ctx.call('POST', `/exercises/${EX.multiErrors}/hints`)).status).toBe(200);
+  });
+
+  it('locks the solution until all hints are open, then records one view', async () => {
+    const ctx = await practiceApp();
+    const locked = await ctx.call('POST', `/exercises/${EX.multiErrors}/solution`);
+    expect(locked.status).toBe(409);
+    expect(errorCode(locked.json)).toBe('EXERCISE_SOLUTION_LOCKED');
+    for (let i = 0; i < 3; i++) await ctx.call('POST', `/exercises/${EX.multiErrors}/hints`);
+
+    const res = await ctx.call('POST', `/exercises/${EX.multiErrors}/solution`);
+    expect(res.status).toBe(200);
+    const body = solutionResponseSchema.parse(res.json);
+    expect(body.explanation).toBe(`${EX.multiErrors} 해설`);
+    expect(body.solution).toEqual({
+      kind: 'choices',
+      choices: [
+        { id: 'a', text: '쓰지 않은 변수' },
+        { id: 'b', text: '같은 범위의 `x := 1` 두 번' },
+      ],
+    });
+    expect(res.text).not.toContain('RATIONALE-MARK'); // wrong-option feedback stays hidden
+    await ctx.call('POST', `/exercises/${EX.multiErrors}/solution`);
+    const solutionEvents = ctx.userDb.sqlite
+      .prepare("SELECT COUNT(*) AS n FROM hint_events WHERE kind = 'solution'")
+      .get() as { n: number };
+    expect(solutionEvents.n).toBe(1);
+    const view = exerciseViewSchema.parse(
+      (await ctx.call('GET', `/exercises/${EX.multiErrors}`)).json,
+    );
+    expect(view.solutionViewed).toBe(true);
+  });
+
+  it('shows the reference answer per type', async () => {
+    const ctx = await practiceApp();
+    const solution = async (id: string) => {
+      for (let i = 0; i < 3; i++) await ctx.call('POST', `/exercises/${id}/hints`);
+      return solutionResponseSchema.parse(
+        (await ctx.call('POST', `/exercises/${id}/solution`)).json,
+      ).solution;
+    };
+    expect(await solution(EX.mcq)).toEqual({
+      kind: 'choice',
+      choiceId: 'b',
+      text: '`2`를 출력한다',
+    });
+    expect(await solution(EX.mcqMulti)).toEqual({
+      kind: 'choices',
+      choices: [
+        { id: 'a', text: '`fmt.Println`은 값을 출력한다' },
+        { id: 'b', text: '문장은 위에서 아래로 실행된다' },
+      ],
+    });
+    expect(await solution(EX.trueFalse)).toEqual({ kind: 'text', text: '거짓이에요.' });
+  });
+});
+
+describe('POST /exercises/:id/reports', () => {
+  it('records a report that excludes the exercise', async () => {
+    const ctx = await practiceApp();
+    const res = await ctx.call('POST', `/exercises/${EX.mcqOutput}/reports`, {
+      reason: 'unclear',
+      note: '  출력이 두 줄일 수도 있어요  ',
+    });
+    expect(res.status).toBe(201);
+    expect(reportResponseSchema.parse(res.json).excluded).toBe(true);
+    const row = ctx.userDb.sqlite
+      .prepare(
+        'SELECT exercise_id, reason, exercise_origin, excluded, note, status FROM exercise_reports',
+      )
+      .get();
+    expect(row).toEqual({
+      exercise_id: EX.mcqOutput,
+      reason: 'unclear',
+      exercise_origin: 'authored',
+      excluded: 1,
+      note: '출력이 두 줄일 수도 있어요',
+      status: 'open',
+    });
+  });
+
+  it('validates the reason', async () => {
+    const { call } = await practiceApp();
+    const res = await call('POST', `/exercises/${EX.mcqOutput}/reports`, { reason: 'boring' });
+    expect(res.status).toBe(400);
+    expect(errorCode(res.json)).toBe('VALIDATION_FAILED');
+  });
+});

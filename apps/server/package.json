@@ -1,0 +1,36 @@
+{
+  "name": "@proginone/server",
+  "version": "0.0.0",
+  "private": true,
+  "description": "ProgInOne Go 로컬 서버 (Hono)",
+  "type": "module",
+  "exports": {
+    ".": "./src/http/app.ts"
+  },
+  "scripts": {
+    "dev": "node --watch --watch-preserve-output src/main.ts",
+    "start": "NODE_ENV=production node src/main.ts",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "db:generate": "drizzle-kit generate"
+  },
+  "dependencies": {
+    "@hono/node-server": "^2.1.8",
+    "@proginone/ai": "^0.2.0",
+    "@proginone/content-schema": "^0.2.0",
+    "@proginone/exercise-kit": "workspace:*",
+    "@proginone/learning-engine": "^0.2.0",
+    "@proginone/shared": "^0.2.0",
+    "better-sqlite3": "^13.2.0",
+    "drizzle-orm": "^0.45.4",
+    "env-paths": "^4.0.0",
+    "hono": "^4.13.19",
+    "pino": "^10.4.0",
+    "ulid": "^3.0.2",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^9.6.0",
+    "drizzle-kit": "^0.31.11",
+    "pino-pretty": "^13.2.0"
+  }
+}
