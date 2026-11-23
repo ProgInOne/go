@@ -1,0 +1,14 @@
+# 공개한 콘텐츠 slug 목록. content-cli build가 갱신합니다(직접 고치지 않습니다).
+# 여기 있던 slug가 콘텐츠에서 사라지면 content-cli check가 경고합니다. aliases.yaml에
+# 새 slug를 기록하거나, 의도한 삭제라면 pnpm content:build로 이 파일을 갱신해 커밋하세요.
+concept go.basics.println
+concept go.basics.program-structure
+concept go.vars.short-declaration
+course go-basics
+lesson go-basics.start.first-program
+lesson go-basics.start.variables
+misconception go.mc.println-without-import
+misconception go.mc.short-decl-reassigns
+misconception go.mc.top-function-runs-first
+misconception go.mc.unused-variable-ok
+module go-basics.start

@@ -1,6 +1,6 @@
 /**
  * Dependency rules. Rules about published @proginone/* packages (node_modules, excluded here)
- * live in eslint.config.js. Rules for apps/ and packages/ are added with them.
+ * live in eslint.config.js.
  * @type {import('dependency-cruiser').IConfiguration}
  */
 module.exports = {
@@ -18,6 +18,16 @@ module.exports = {
       comment: '패키지는 앱에 의존하지 않습니다.',
       from: { path: '^packages/' },
       to: { path: '^apps/' },
+    },
+    {
+      name: 'pure-packages-no-io',
+      severity: 'error',
+      comment: 'exercise-kit는 I/O 없는 순수 함수입니다(채점은 서버 경계 밖의 부수 효과가 없음).',
+      from: { path: '^packages/exercise-kit/' },
+      to: {
+        dependencyTypes: ['core'],
+        path: '^(fs|node:fs|net|node:net|http|node:http|child_process|node:child_process)',
+      },
     },
   ],
   options: {

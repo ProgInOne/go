@@ -1,0 +1,14 @@
+id: go-basics.start.variables
+title: 변수 선언
+summary: := 로 새 변수를 만들고, = 로 값을 바꾸며, 쓰지 않는 변수가 왜 오류인지 배웁니다.
+kind: lesson
+importance: standard
+estimatedMinutes: { read: 10, practice: 5 }
+concepts:
+  primary: [go.vars.short-declaration]
+objectives:
+  - := 로 새 변수를 선언할 수 있다.
+  - := 와 = 의 차이를 설명할 수 있다.
+  - 선언하고 쓰지 않은 변수가 컴파일 오류가 되는 것을 안다.
+practice:
+  targetCount: 2

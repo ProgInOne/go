@@ -1,0 +1,13 @@
+id: go-basics.start.first-program
+title: 첫 Go 프로그램
+summary: package main, import, func main으로 이루어진 Go 프로그램의 모양을 읽고 fmt.Println으로 값을 출력합니다.
+kind: lesson
+importance: standard
+estimatedMinutes: { read: 10, practice: 5 }
+concepts:
+  primary: [go.basics.program-structure, go.basics.println]
+objectives:
+  - Go 프로그램의 세 부분(package, import, func main)을 구분할 수 있다.
+  - fmt.Println이 값을 어떤 모양으로 출력하는지 예측할 수 있다.
+practice:
+  targetCount: 2

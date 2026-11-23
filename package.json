@@ -15,10 +15,13 @@
     "typecheck": "tsc -p tsconfig.json && pnpm -r --parallel --if-present typecheck",
     "test": "vitest run",
     "test:watch": "vitest",
+    "content:check": "node tools/content-cli/src/cli.ts check --dir content",
+    "content:build": "node tools/content-cli/src/cli.ts build --dir content --out content/dist/content.db",
+    "content:build:dev": "node tools/content-cli/src/cli.ts build --dir content --out content/dist/content.db --include-drafts",
     "build": "pnpm -r --if-present build",
-    "check:deps": "depcruise tools --config .dependency-cruiser.cjs",
+    "check:deps": "depcruise packages tools --config .dependency-cruiser.cjs",
     "check:links": "node tools/check-links.mjs",
-    "check": "pnpm lint && pnpm format:check && pnpm typecheck && pnpm check:deps && pnpm test && pnpm check:links"
+    "check": "pnpm lint && pnpm format:check && pnpm typecheck && pnpm check:deps && pnpm test && pnpm content:check && pnpm check:links"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

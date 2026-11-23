@@ -1,0 +1,24 @@
+id: go-basics.start.variables.check-reassign-operator
+type: true_false
+difficulty: 1
+usage: check
+concepts:
+  - { id: go.vars.short-declaration, weight: 1 }
+tags: [assignment]
+estimatedSeconds: 30
+prompt: 다음 설명이 맞는지 판단하세요.
+spec:
+  statement: 이미 선언한 변수의 값을 바꿀 때는 `=`를 쓴다.
+  answer: true
+hints:
+  - '`:=`는 무엇을 만드나요?'
+  - 이미 있는 변수에 새 변수를 또 만들 필요가 있을까요?
+  - 값만 바꾸는 기호를 떠올려 보세요.
+explanation: |
+  맞는 설명이에요.
+
+  `:=`는 새 변수를 만들고, 이미 있는 변수의 값은 `=`로 바꿔요.
+origin: authored
+review:
+  status: draft
+  draftedBy: ai:claude

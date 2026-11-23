@@ -32,3 +32,4 @@ test-results/
 
 # Local agent worktrees
 .claude/
+content/dist/

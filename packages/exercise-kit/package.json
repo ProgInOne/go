@@ -1,0 +1,16 @@
+{
+  "name": "@proginone/exercise-kit",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Go 저장소의 문제 유형 레지스트리와 경계 함수(공통 선택형 3종)",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "@proginone/exercise-core": "^0.2.0"
+  }
+}

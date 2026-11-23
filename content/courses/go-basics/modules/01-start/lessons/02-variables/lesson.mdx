@@ -1,0 +1,100 @@
+<Section kind="objectives">
+- `:=`로 새 변수를 선언할 수 있어요.
+- `:=`와 `=`의 차이를 설명할 수 있어요.
+- 선언하고 쓰지 않은 변수가 컴파일 오류가 되는 것을 알아요.
+</Section>
+
+<Section kind="prerequisites">
+- <ConceptLink to="go.basics.println">fmt.Println으로 출력하기</ConceptLink>
+</Section>
+
+<Section kind="intro">
+같은 값을 여러 번 쓰거나 값을 바꿔 가며 계산하려면 값에 이름을 붙여 두면 편해요. 이름이 붙은 값을 **변수**라고 해요.
+</Section>
+
+<Section kind="principle">
+### := 로 새 변수 만들기
+
+```go
+name := "고퍼"
+age := 3
+fmt.Println(name, age)
+```
+
+`이름 := 값`은 새 변수를 만들고 처음 값을 넣어요. 이것을 <ConceptLink to="go.vars.short-declaration">짧은 변수 선언</ConceptLink>이라고 해요. 변수의 자료형은 값에서 정해져요. `"고퍼"`는 문자열(`string`), `3`은 정수(`int`)예요.
+
+`:=`는 **함수 안에서만** 쓸 수 있어요.
+
+### = 로 값 바꾸기
+
+```go
+count := 1
+count = 2
+fmt.Println(count)
+```
+
+이미 있는 변수의 값을 바꿀 때는 `=`를 써요. 이 코드는 `2`를 출력해요.
+
+<CompareTable columns={["기호", "하는 일"]}>
+<Row label=":=">새 변수를 만들고 처음 값을 넣어요</Row>
+<Row label="=">이미 있는 변수에 새 값을 넣어요</Row>
+</CompareTable>
+</Section>
+
+<Section kind="examples">
+```go
+package main
+
+import "fmt"
+
+func main() {
+	price := 1000
+	price = price + 500
+	fmt.Println("가격:", price)
+}
+```
+
+출력은 `가격: 1500`이에요.
+</Section>
+
+<Section kind="walkthrough">
+1. `price := 1000`이 새 변수 `price`를 만들고 `1000`을 넣어요.
+1. `price = price + 500`은 지금 값 `1000`에 `500`을 더한 `1500`을 다시 `price`에 넣어요. 이미 있는 변수라서 `=`를 써요.
+1. `fmt.Println("가격:", price)`가 `가격: 1500`을 출력해요.
+</Section>
+
+<Section kind="pitfalls">
+<Pitfall misconception="go.mc.short-decl-reassigns">
+<Wrong>`x := 1` 다음 줄에 `x := 2`라고 쓰면 값이 바뀐다.</Wrong>
+<Actual>같은 범위에서 새 변수 없이 `:=`를 쓰면 `no new variables on left side of :=` 컴파일 오류가 나요.</Actual>
+<Right>값을 바꿀 때는 `x = 2`처럼 `=`를 써요.</Right>
+</Pitfall>
+
+<Pitfall misconception="go.mc.unused-variable-ok">
+<Wrong>선언만 하고 쓰지 않은 변수는 그냥 무시된다.</Wrong>
+<Actual>함수 안의 쓰지 않은 변수는 `declared and not used` 컴파일 오류가 되어 프로그램이 실행되지 않아요.</Actual>
+<Right>필요 없는 변수는 지우고, 선언한 변수는 꼭 써요.</Right>
+</Pitfall>
+</Section>
+
+<Section kind="in-practice">
+Go는 쓰지 않는 변수와 import를 오류로 막아서, 지우는 것을 잊은 코드가 쌓이지 않게 해요. 코드를 고치다가 이 오류를 만나면 그 변수가 정말 필요한지 먼저 확인해요.
+</Section>
+
+<Section kind="check">
+<InlineExercise ref="go-basics.start.variables.check-reassign-operator" />
+</Section>
+
+<Section kind="practice">
+아래 문제로 `:=`와 `=`의 쓰임을 확인해요.
+</Section>
+
+<Section kind="summary">
+- `:=`는 함수 안에서 새 변수를 만들어요.
+- 이미 있는 변수의 값은 `=`로 바꿔요.
+- 쓰지 않는 변수는 컴파일 오류예요.
+</Section>
+
+<Section kind="next">
+이 과정은 뼈대용 예시라 여기까지예요. Go 코드를 직접 실행하는 실습은 Go 전용 설계 이후에 더해요.
+</Section>

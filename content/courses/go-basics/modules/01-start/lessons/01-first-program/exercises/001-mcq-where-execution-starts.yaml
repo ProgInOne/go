@@ -1,0 +1,52 @@
+id: go-basics.start.first-program.mcq-where-execution-starts
+type: mcq_single
+difficulty: 1
+concepts:
+  - { id: go.basics.program-structure, weight: 1 }
+tags: [main]
+estimatedSeconds: 40
+prompt: |
+  아래 프로그램을 실행하면 가장 먼저 실행되는 문장은 무엇인가요?
+
+  ```go
+  package main
+
+  import "fmt"
+
+  func greet() {
+  	fmt.Println("반가워요")
+  }
+
+  func main() {
+  	fmt.Println("시작")
+  	greet()
+  }
+  ```
+spec:
+  options:
+    - id: a
+      text: '`main` 함수 안의 `fmt.Println("시작")`'
+    - id: b
+      text: '`greet` 함수 안의 `fmt.Println("반가워요")`'
+      misconception: go.mc.top-function-runs-first
+      rationale: 위에 적혀 있어도 `greet`는 `main`이 부를 때 실행돼요. 실행은 `main`에서 시작해요.
+    - id: c
+      text: '`import "fmt"`'
+      rationale: import는 패키지를 가져오는 준비일 뿐, 실행되는 문장이 아니에요.
+    - id: d
+      text: 두 함수가 동시에 실행된다
+      rationale: 문장은 `main`에서 시작해 한 번에 하나씩 실행돼요.
+  correct: a
+misconceptions: [go.mc.top-function-runs-first]
+hints:
+  - Go 프로그램을 실행하면 어느 함수에서 시작하나요?
+  - 파일에 적힌 순서와 실행 순서는 다를 수 있어요.
+  - '`greet`는 누가 부르나요?'
+explanation: |
+  정답은 `main` 함수 안의 `fmt.Println("시작")`이에요.
+
+  실행은 언제나 `main` 함수에서 시작해요. `greet`는 파일 위쪽에 있지만 `main`이 `greet()`로 부를 때 실행돼요. 그래서 출력은 `시작`, 그다음 `반가워요`예요.
+origin: authored
+review:
+  status: draft
+  draftedBy: ai:claude

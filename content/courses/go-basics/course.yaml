@@ -1,0 +1,13 @@
+# 뼈대용 예시 과정입니다(G-001). Go 코드 실행이 없어 레슨과 선택형 문제만 있습니다.
+id: go-basics
+title: Go 기초
+summary: Go 프로그램의 기본 모양과 출력, 변수 선언을 배웁니다.
+language: go
+level: intro
+depth: full
+status: preview
+objectives:
+  - package main과 func main으로 이루어진 Go 프로그램의 모양을 설명할 수 있다.
+  - fmt.Println으로 값을 출력하고, 출력 모양을 예측할 수 있다.
+  - := 와 = 를 구분해 변수를 선언하고 값을 바꿀 수 있다.
+modules: [start]
