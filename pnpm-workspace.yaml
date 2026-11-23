@@ -1,0 +1,14 @@
+packages:
+  - apps/*
+  - packages/*
+  - tools/*
+
+# Dependency build scripts are opt-in. esbuild's postinstall only re-validates the binary that
+# its platform package already ships, so it stays off.
+allowBuilds:
+  esbuild: false
+
+minimumReleaseAgeExclude:
+  # Our own packages: ProgInOne/core publishes `next` snapshots minutes before this repository
+  # uses them.
+  - '@proginone/*'
