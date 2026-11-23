@@ -9,6 +9,8 @@
     "node": ">=24"
   },
   "scripts": {
+    "dev": "pnpm --filter @proginone/server dev",
+    "start": "pnpm --filter @proginone/server start",
     "lint": "eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
@@ -19,7 +21,7 @@
     "content:build": "node tools/content-cli/src/cli.ts build --dir content --out content/dist/content.db",
     "content:build:dev": "node tools/content-cli/src/cli.ts build --dir content --out content/dist/content.db --include-drafts",
     "build": "pnpm -r --if-present build",
-    "check:deps": "depcruise packages tools --config .dependency-cruiser.cjs",
+    "check:deps": "depcruise apps packages tools --config .dependency-cruiser.cjs",
     "check:links": "node tools/check-links.mjs",
     "check": "pnpm lint && pnpm format:check && pnpm typecheck && pnpm check:deps && pnpm test && pnpm content:check && pnpm check:links"
   },

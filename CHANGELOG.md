@@ -7,6 +7,8 @@
 
 ### Added
 
+- 서버 뼈대(`apps/server`): JavaScript 앱의 서버를 복사해 Go 코드 실행 부분을 걷어 냄(G-001). 과정·레슨·선택형 문제 채점·학습 엔진 흐름(숙련도, 복습, 오늘의 학습, 목표)·AI 튜터(Go 튜터 프로필)·설정·백업을 제공. 포트 `4311`, 프로덕션 데이터 폴더 `ProgInOne Go`. 실행 결과가 붙은 채점 요청은 거부
+- 문서: 시작하기 가이드, 서버 README
 - 콘텐츠 도구 `tools/content-cli`(`pnpm content:check`, `content:build`, `content:build:dev`): JavaScript 저장소의 도구에서 코드 실행 검증, 예측 문제 기대값, 문제 템플릿, 수량 기준 보고서, JS 전용 MDX 컴포넌트를 뺐음. 과정 언어는 `go`, 개념 참고 문서는 go.dev·pkg.go.dev 주소. 실행이 필요한 `usage: try`·`project`와 프로젝트 단원은 오류로 알림(G-001)
 - 문제 유형 레지스트리 `packages/exercise-kit`: 공통 선택형 3종만 등록
 - 예시 과정 `go-basics`(레슨 2개, 선택형 문제 6개): 프로그램의 모양과 `fmt.Println`, `:=`와 `=`

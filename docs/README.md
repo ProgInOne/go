@@ -24,6 +24,7 @@ ProgInOne Go 저장소의 모든 문서 목록과 읽는 순서입니다.
 
 | 문서 | 설명 |
 |---|---|
+| [시작하기](/docs/guides/getting-started.md) | 서버 실행, 포트와 데이터 위치, 설정, 테스트 |
 | [콘텐츠 작성 가이드](/docs/guides/content-authoring.md) | 지금 쓸 수 있는 콘텐츠, 디렉터리 구조, 검사와 빌드, 예시 과정 |
 
 ## 검토 기록
@@ -40,6 +41,6 @@ ProgInOne Go 저장소의 모든 문서 목록과 읽는 순서입니다.
 
 | 문서 | 작성 시점 |
 |---|---|
-| 시작하기, 테스트 가이드 | 서버·웹 뼈대를 추가할 때 |
+| 테스트 가이드 | 웹 뼈대와 E2E를 추가할 때 |
 | Go 콘텐츠·문제 유형, 코드 실행 샌드박스, 에디터 설계 | Go 전용 설계 단계 |
-| 패키지별 `README.md` | 각 패키지 생성 시 ([exercise-kit](/packages/exercise-kit/README.md)) |
+| 패키지별 `README.md` | 각 패키지 생성 시 ([exercise-kit](/packages/exercise-kit/README.md), [server](/apps/server/README.md)) |
