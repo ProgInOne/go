@@ -48,5 +48,6 @@ explanation: |
   실행은 언제나 `main` 함수에서 시작해요. `greet`는 파일 위쪽에 있지만 `main`이 `greet()`로 부를 때 실행돼요. 그래서 출력은 `시작`, 그다음 `반가워요`예요.
 origin: authored
 review:
-  status: draft
+  status: approved
   draftedBy: ai:claude
+  reviewedBy: ai:reviewer

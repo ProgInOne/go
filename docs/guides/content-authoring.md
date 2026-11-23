@@ -51,4 +51,4 @@ CI는 `pnpm content:check`를 실행합니다. MDX와 `content/`는 Prettier 대
 
 ## 예시 과정
 
-`content/courses/go-basics`는 뼈대를 확인하기 위한 예시 과정입니다. 레슨 2개와 선택형 문제 6개가 있고, 문제는 아직 검토 전(draft)입니다. 그래서 `pnpm content:build`에는 문제가 들어가지 않고, 앱에서 문제를 보려면 `pnpm content:build:dev`로 빌드합니다.
+`content/courses/go-basics`는 뼈대를 확인하기 위한 예시 과정입니다. 레슨 2개와 선택형 문제 6개가 있고, 문제는 독립 AI 검토자가 승인했습니다([검토 기록](/docs/reviews/2026-11-23-go-basics-start-review.md)). 그래서 `pnpm content:build`에 문제 6개가 모두 들어갑니다.

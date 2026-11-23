@@ -21,5 +21,6 @@ explanation: |
   `fmt`는 표준 라이브러리 패키지라서 `import "fmt"`로 가져와야 쓸 수 있어요. 가져오지 않으면 `undefined: fmt` 컴파일 오류가 나요.
 origin: authored
 review:
-  status: draft
+  status: approved
   draftedBy: ai:claude
+  reviewedBy: ai:reviewer

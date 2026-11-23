@@ -26,6 +26,14 @@ ProgInOne Go 저장소의 모든 문서 목록과 읽는 순서입니다.
 |---|---|
 | [콘텐츠 작성 가이드](/docs/guides/content-authoring.md) | 지금 쓸 수 있는 콘텐츠, 디렉터리 구조, 검사와 빌드, 예시 과정 |
 
+## 검토 기록
+
+콘텐츠 AI 교차 검토([JS D-027](https://github.com/ProgInOne/javascript/blob/develop/docs/decisions.md))의 판단과 수정 내용입니다.
+
+| 문서 | 대상 |
+|---|---|
+| [Go 기초 시작하기 모듈 검토 (2026-11-23)](/docs/reviews/2026-11-23-go-basics-start-review.md) | 레슨 2개, 문제 6개 (`go-basics.start`), Go 개념·오개념 목록 |
+
 ## 예정 문서
 
 해당 작업을 시작할 때 작성합니다. 아직 내용이 없으므로 파일을 만들지 않습니다.
