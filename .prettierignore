@@ -5,3 +5,6 @@ dist/
 coverage/
 .data/
 .claude/
+# Content sources (MDX/YAML) follow the content authoring rules, not Prettier.
+*.mdx
+content/

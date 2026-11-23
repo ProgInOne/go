@@ -1,0 +1,104 @@
+<Section kind="objectives">
+- Go 프로그램의 세 부분(`package`, `import`, `func main`)을 구분할 수 있어요.
+- `fmt.Println`이 값을 어떤 모양으로 출력하는지 예측할 수 있어요.
+</Section>
+
+<Section kind="prerequisites" />
+
+<Section kind="intro">
+**프로그램**은 컴퓨터에게 시킬 일을 순서대로 적어 둔 글이에요. Go 프로그램은 정해진 모양이 있어서, 그 모양만 알면 처음 보는 프로그램도 어디서부터 읽을지 알 수 있어요.
+
+이 단원에서는 가장 짧은 Go 프로그램을 읽고, 값을 화면에 보여 주는 <ConceptLink to="go.basics.println">`fmt.Println`</ConceptLink>을 배워요.
+</Section>
+
+<Section kind="principle">
+### 가장 짧은 Go 프로그램
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("안녕하세요")
+}
+```
+
+이 프로그램은 세 부분으로 이루어져 있어요. <ConceptLink to="go.basics.program-structure">Go 프로그램의 모양</ConceptLink>이에요.
+
+- `package main`: 이 파일이 **실행할 수 있는 프로그램**이라는 표시예요.
+- `import "fmt"`: 출력 기능이 들어 있는 표준 라이브러리 패키지 `fmt`를 가져와요.
+- `func main() { ... }`: 프로그램을 실행하면 **여기서부터** 시작해요. 중괄호 안의 문장을 위에서 아래로 실행해요.
+
+### fmt.Println의 출력 모양
+
+`fmt.Println`은 괄호 안의 값을 출력하고 줄을 바꿔요.
+
+<CompareTable columns={["코드", "출력", "설명"]}>
+<Row label="글자">`fmt.Println("안녕")` | 안녕 | 큰따옴표 안의 글자만 나와요</Row>
+<Row label="계산">`fmt.Println(3 + 4)` | 7 | 계산한 결과가 나와요</Row>
+<Row label="여러 값">`fmt.Println("합계:", 7)` | 합계: 7 | 값 사이에 공백을 하나 넣어요</Row>
+</CompareTable>
+</Section>
+
+<Section kind="examples">
+다음 프로그램은 두 줄을 출력해요.
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("첫째 줄")
+	fmt.Println("둘째 줄", 2)
+}
+```
+
+출력은 `첫째 줄`, 그다음 줄에 `둘째 줄 2`예요.
+</Section>
+
+<Section kind="walkthrough">
+위 예제를 순서대로 따라가 봐요.
+
+1. `package main`과 `import "fmt"`는 준비 단계예요. 아무것도 출력하지 않아요.
+1. 실행은 `func main()`에서 시작해요.
+1. 첫 문장이 `첫째 줄`을 출력하고 줄을 바꿔요.
+1. 둘째 문장은 값이 두 개라서 사이에 공백을 넣어 `둘째 줄 2`를 출력해요.
+</Section>
+
+<Section kind="pitfalls">
+<Pitfall misconception="go.mc.top-function-runs-first">
+<Wrong>파일 맨 위에 적은 함수가 먼저 실행된다.</Wrong>
+<Actual>실행은 언제나 `main` 함수에서 시작해요. 다른 함수는 불러야 실행돼요.</Actual>
+<Right>프로그램을 읽을 때는 `func main()`부터 찾아요.</Right>
+</Pitfall>
+
+<Pitfall misconception="go.mc.println-without-import">
+<Wrong>`fmt.Println`은 `import "fmt"` 없이도 쓸 수 있다.</Wrong>
+<Actual>`fmt`를 가져오지 않으면 `undefined: fmt` 컴파일 오류가 나요.</Actual>
+<Right>`fmt.Println`을 쓰려면 파일 위쪽에 `import "fmt"`를 적어요.</Right>
+</Pitfall>
+</Section>
+
+<Section kind="in-practice">
+Go 개발자는 프로그램이 어디까지 실행됐는지, 값이 무엇인지 확인할 때 `fmt.Println`을 자주 써요. 큰 프로그램도 시작점은 언제나 `main` 함수예요.
+</Section>
+
+<Section kind="check">
+<InlineExercise ref="go-basics.start.first-program.check-println-two-values" />
+</Section>
+
+<Section kind="practice">
+아래 문제로 프로그램의 모양과 출력 모양을 확인해요.
+</Section>
+
+<Section kind="summary">
+- 실행할 수 있는 Go 프로그램은 `package main`으로 시작해요.
+- 실행은 `func main()`에서 시작해요.
+- `fmt.Println`을 쓰려면 `import "fmt"`가 필요하고, 값이 여러 개면 사이에 공백을 넣어 출력해요.
+</Section>
+
+<Section kind="next">
+다음 단원에서는 값에 이름을 붙이는 **변수**를 배워요.
+</Section>

@@ -1,0 +1,39 @@
+id: go-basics.start.variables.multi-compile-errors
+type: mcq_multi
+difficulty: 2
+concepts:
+  - { id: go.vars.short-declaration, weight: 1 }
+tags: [short-declaration, compile-error]
+estimatedSeconds: 90
+prompt: '`main` 함수 안에 적었을 때 **컴파일 오류**가 나는 코드를 모두 고르세요. (`fmt`는 import되어 있어요.)'
+spec:
+  options:
+    - id: a
+      text: '`x := 1` 다음 줄에 `x := 2`'
+      missedMisconception: go.mc.short-decl-reassigns
+    - id: b
+      text: '`y := 5`만 쓰고 `y`를 어디에서도 쓰지 않음'
+      missedMisconception: go.mc.unused-variable-ok
+    - id: c
+      text: '`z := 1` 다음 줄에 `z = 2`, 그다음 줄에 `fmt.Println(z)`'
+      rationale: 이미 있는 변수의 값을 `=`로 바꾸고 출력까지 하므로 문제없어요.
+    - id: d
+      text: '`name := "고퍼"` 다음 줄에 `fmt.Println(name)`'
+      rationale: 새 변수를 만들고 바로 쓰므로 문제없어요.
+  correct: [a, b]
+misconceptions: [go.mc.short-decl-reassigns, go.mc.unused-variable-ok]
+hints:
+  - '`:=`는 새 변수를 만들어요. 같은 이름을 두 번 만들 수 있을까요?'
+  - 선언만 하고 쓰지 않은 변수를 Go는 어떻게 다루나요?
+  - 문제없는 보기는 변수를 선언하고 실제로 써요.
+explanation: |
+  컴파일 오류가 나는 것은 두 가지예요.
+
+  - `x := 2`: 같은 범위에 새 변수가 없어서 `no new variables on left side of :=` 오류가 나요.
+  - `y := 5`만 쓰기: 쓰지 않은 변수라서 `declared and not used` 오류가 나요.
+
+  나머지 두 보기는 변수를 선언하고 실제로 쓰므로 문제없어요.
+origin: authored
+review:
+  status: draft
+  draftedBy: ai:claude

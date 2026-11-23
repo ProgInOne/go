@@ -1,0 +1,25 @@
+id: go-basics.start.first-program.tf-println-needs-import
+type: true_false
+difficulty: 1
+concepts:
+  - { id: go.basics.println, weight: 1 }
+tags: [import, fmt]
+estimatedSeconds: 30
+prompt: 다음 설명이 맞는지 판단하세요.
+spec:
+  statement: '`import "fmt"`가 없는 파일에서도 `fmt.Println`을 쓸 수 있다.'
+  answer: false
+  misconception: go.mc.println-without-import
+misconceptions: [go.mc.println-without-import]
+hints:
+  - '`fmt`는 무엇인가요? 명령인가요, 패키지인가요?'
+  - 표준 라이브러리 패키지를 쓰려면 무엇을 해야 하나요?
+  - 가져오지 않은 패키지 이름을 쓰면 컴파일러가 그 이름을 알까요?
+explanation: |
+  틀린 설명이에요.
+
+  `fmt`는 표준 라이브러리 패키지라서 `import "fmt"`로 가져와야 쓸 수 있어요. 가져오지 않으면 `undefined: fmt` 컴파일 오류가 나요.
+origin: authored
+review:
+  status: draft
+  draftedBy: ai:claude

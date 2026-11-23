@@ -1,0 +1,29 @@
+# Go 개념
+# 선수 관계는 직접 필요한 것만 적습니다(추이적 관계는 적지 않음).
+
+# ── 모듈 1. 시작하기: first-program ──
+
+- id: go.basics.program-structure
+  title: Go 프로그램의 모양
+  importance: standard
+  summary: 실행할 수 있는 Go 프로그램은 package main으로 시작하고, 실행은 main 함수에서 시작해요.
+  misconceptions: [go.mc.top-function-runs-first]
+  doc: https://go.dev/ref/spec#Program_execution
+
+- id: go.basics.println
+  title: fmt.Println으로 출력하기
+  importance: standard
+  summary: fmt 패키지를 import하면 fmt.Println(값)으로 값을 한 줄에 출력할 수 있어요. 값이 여러 개면 사이에 공백을 넣어요.
+  prerequisites: [go.basics.program-structure]
+  misconceptions: [go.mc.println-without-import]
+  doc: https://pkg.go.dev/fmt#Println
+
+# ── 모듈 1. 시작하기: variables ──
+
+- id: go.vars.short-declaration
+  title: := 로 변수 선언하기
+  importance: standard
+  summary: 함수 안에서 이름 := 값 으로 새 변수를 만들어요. 이미 있는 변수의 값을 바꿀 때는 = 를 써요.
+  prerequisites: [go.basics.println]
+  misconceptions: [go.mc.short-decl-reassigns, go.mc.unused-variable-ok]
+  doc: https://go.dev/ref/spec#Short_variable_declarations

@@ -8,11 +8,11 @@ ProgInOne은 체계적인 커리큘럼, 충분한 문제은행, 실습 환경, A
 
 ## 현재 상태
 
-🟡 **뼈대 구축 중**: 도구와 CI를 갖췄습니다. 다음으로 콘텐츠 파이프라인, 서버, 웹 뼈대를 차례로 추가합니다([G-001](docs/decisions.md#g-001-go-앱의-형태와-저장소-운영--확정)).
+🟡 **뼈대 구축 중**: 도구, CI, 콘텐츠 파이프라인과 예시 과정을 갖췄습니다. 다음으로 서버와 웹 뼈대를 차례로 추가합니다([G-001](docs/decisions.md#g-001-go-앱의-형태와-저장소-운영--확정)).
 
 ## 문서
 
-모든 문서는 [문서 지도](docs/README.md)에서 찾을 수 있습니다. 기여 방법은 [기여 가이드](CONTRIBUTING.md)를 참고하세요.
+모든 문서는 [문서 지도](docs/README.md)에서 찾을 수 있습니다. 콘텐츠는 [콘텐츠 작성 가이드](docs/guides/content-authoring.md)를 따릅니다. 기여 방법은 [기여 가이드](CONTRIBUTING.md)를 참고하세요.
 
 ## 빠른 시작
 
@@ -20,7 +20,8 @@ ProgInOne은 체계적인 커리큘럼, 충분한 문제은행, 실습 환경, A
 
 ```shell
 pnpm install
-pnpm check   # lint, 포맷, 타입, 의존 규칙, 테스트, 문서 링크 검사
+pnpm check           # lint, 포맷, 타입, 의존 규칙, 테스트, 콘텐츠 검사, 문서 링크 검사
+pnpm content:build   # content/dist/content.db 빌드 (콘텐츠 작성 가이드 참고)
 ```
 
 `@proginone/*` 패키지는 GitHub Packages에서 받습니다. 사용자 설정(`~/.npmrc`)에 `read:packages` 권한의 토큰을 넣어 두세요([JS D-094](https://github.com/ProgInOne/javascript/blob/develop/docs/decisions.md)).

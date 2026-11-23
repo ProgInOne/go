@@ -1,0 +1,4 @@
+id: go-basics.start
+title: 시작하기
+summary: 첫 Go 프로그램을 읽고, 값을 출력하고, 변수에 담습니다.
+lessons: [first-program, variables]
