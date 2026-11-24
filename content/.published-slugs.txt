@@ -6,10 +6,12 @@ concept go.basics.program-structure
 concept go.vars.short-declaration
 course go-basics
 exercise go-basics.start.first-program.check-println-two-values
+exercise go-basics.start.first-program.mcq-trace-two-functions
 exercise go-basics.start.first-program.mcq-where-execution-starts
 exercise go-basics.start.first-program.tf-println-needs-import
 exercise go-basics.start.variables.check-reassign-operator
 exercise go-basics.start.variables.mcq-change-value
+exercise go-basics.start.variables.mcq-trace-copy
 exercise go-basics.start.variables.multi-compile-errors
 lesson go-basics.start.first-program
 lesson go-basics.start.variables
