@@ -35,6 +35,7 @@ ProgInOne Go 저장소의 모든 문서 목록과 읽는 순서입니다.
 | 문서 | 대상 |
 |---|---|
 | [Go 기초 시작하기 모듈 검토 (2026-11-23)](/docs/reviews/2026-11-23-go-basics-start-review.md) | 레슨 2개, 문제 6개 (`go-basics.start`), Go 개념·오개념 목록 |
+| [Go 기초 난이도 3 문제 검토 (2026-11-24)](/docs/reviews/2026-11-24-go-basics-level3-review.md) | 난이도 3 문제 2개 (`go-basics.start`), 레슨 연습 목표 수 |
 
 ## 예정 문서
 

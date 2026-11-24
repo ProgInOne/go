@@ -1,0 +1,49 @@
+id: go-basics.start.variables.mcq-trace-copy
+type: mcq_single
+difficulty: 3
+concepts:
+  - { id: go.vars.short-declaration, weight: 1 }
+tags: [short-declaration, assignment, trace]
+estimatedSeconds: 90
+prompt: |
+  `main` 함수 안의 아래 코드는 무엇을 출력하나요? (`fmt`는 import되어 있어요.)
+
+  ```go
+  a := 5
+  b := a
+  a = a + 3
+  b = b * 2
+  fmt.Println(a, b)
+  ```
+spec:
+  options:
+    - id: a
+      text: '`8 10`'
+    - id: b
+      text: '`8 16`'
+      rationale: '`b := a`는 그 순간의 값 `5`를 `b`에 넣어요. 나중에 `a`가 바뀌어도 `b`는 따라 바뀌지 않아요.'
+    - id: c
+      text: '`5 10`'
+      rationale: '`a = a + 3`은 지금 값 `5`에 `3`을 더한 `8`을 다시 `a`에 넣어요.'
+    - id: d
+      text: 컴파일 오류가 난다
+      rationale: '`b := a`처럼 다른 변수의 값으로 새 변수를 만들 수 있어요. `=`는 이미 있는 변수에만 썼고, 두 변수 모두 출력에 쓰여요.'
+  correct: a
+hints:
+  - 한 줄씩 실행하면서 `a`와 `b`의 값을 적어 보세요.
+  - '`b := a`가 실행된 순간 `b`에는 무엇이 들어가나요?'
+  - '`a`의 값이 바뀌면 `b`의 값도 바뀔까요?'
+explanation: |
+  정답은 `8 10`이에요.
+
+  1. `a := 5`: `a`는 `5`예요.
+  1. `b := a`: 그 순간의 값 `5`가 `b`에 들어가요. `b`는 `a`와 연결되지 않은 별개의 변수예요.
+  1. `a = a + 3`: `a`는 `8`이 돼요. `b`는 그대로 `5`예요.
+  1. `b = b * 2`: `b`는 `10`이 돼요.
+
+  그래서 `fmt.Println(a, b)`는 `8 10`을 출력해요.
+origin: authored
+review:
+  status: approved
+  draftedBy: ai:claude
+  reviewedBy: ai:reviewer

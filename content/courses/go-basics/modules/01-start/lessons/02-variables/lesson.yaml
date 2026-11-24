@@ -11,4 +11,4 @@ objectives:
   - := 와 = 의 차이를 설명할 수 있다.
   - 선언하고 쓰지 않은 변수가 컴파일 오류가 되는 것을 안다.
 practice:
-  targetCount: 2
+  targetCount: 3

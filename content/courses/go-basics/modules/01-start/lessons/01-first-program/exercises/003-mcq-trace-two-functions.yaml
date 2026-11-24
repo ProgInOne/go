@@ -1,0 +1,76 @@
+id: go-basics.start.first-program.mcq-trace-two-functions
+type: mcq_single
+difficulty: 3
+concepts:
+  - { id: go.basics.program-structure, weight: 1 }
+  - { id: go.basics.println, weight: 0.5 }
+tags: [main, println, output]
+estimatedSeconds: 90
+prompt: |
+  아래 프로그램을 실행하면 무엇이 출력되나요?
+
+  ```go
+  package main
+
+  import "fmt"
+
+  func greet() {
+  	fmt.Println("안녕", "고퍼")
+  }
+
+  func count() {
+  	fmt.Println("개수:", 2+3)
+  }
+
+  func main() {
+  	count()
+  	greet()
+  }
+  ```
+spec:
+  options:
+    - id: a
+      text: |
+        ```text
+        개수: 5
+        안녕 고퍼
+        ```
+    - id: b
+      text: |
+        ```text
+        안녕 고퍼
+        개수: 5
+        ```
+      misconception: go.mc.top-function-runs-first
+      rationale: 파일에 적힌 순서가 아니라 `main`이 부르는 순서대로 실행돼요. `main`은 `count`를 먼저 불러요.
+    - id: c
+      text: |
+        ```text
+        개수:5
+        안녕고퍼
+        ```
+      rationale: '`fmt.Println`은 값이 여러 개면 사이에 공백을 하나 넣어요.'
+    - id: d
+      text: |
+        ```text
+        개수: 2+3
+        안녕 고퍼
+        ```
+      rationale: 따옴표 밖의 `2+3`은 계산된 값 `5`로 출력돼요.
+  correct: a
+misconceptions: [go.mc.top-function-runs-first]
+hints:
+  - 실행은 어느 함수에서 시작하나요?
+  - '`main` 안에서 두 함수를 부르는 순서를 확인해 보세요.'
+  - 함수마다 출력할 값이 몇 개인지, 따옴표 밖의 식이 무엇으로 바뀌는지 생각해 보세요.
+explanation: |
+  정답은 `개수: 5` 다음 줄에 `안녕 고퍼`예요.
+
+  1. 실행은 `main`에서 시작해요. `greet`가 파일 위쪽에 있어도 먼저 실행되지 않아요.
+  1. `main`이 `count()`를 먼저 불러요. 값이 두 개라 사이에 공백이 들어가고, `2+3`은 `5`로 계산돼 `개수: 5`가 출력돼요.
+  1. 그다음 `greet()`가 불려요. 여기도 값이 두 개라 사이에 공백이 들어가 `안녕 고퍼`가 출력돼요.
+origin: authored
+review:
+  status: approved
+  draftedBy: ai:claude
+  reviewedBy: ai:reviewer
