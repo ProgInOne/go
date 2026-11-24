@@ -1,0 +1,21 @@
+id: go-basics.start.first-program.tf-main-start
+type: true_false
+difficulty: 1
+concepts:
+  - { id: go.basics.statement, weight: 1 }
+estimatedSeconds: 30
+prompt: |
+  다음 설명이 맞는지 고르세요.
+spec:
+  statement: 프로그램을 실행하면 main 함수에서 시작한다.
+  answer: true
+hints:
+  - 실행할 수 있는 프로그램은 package main이에요.
+  - 그 패키지에서 시작하는 함수의 이름을 떠올려 보세요.
+  - 이름이 main인 함수예요.
+explanation: |
+  **참**이에요. 실행은 main 패키지의 main 함수에서 시작해요.
+origin: authored
+review:
+  status: draft
+  draftedBy: ai:claude

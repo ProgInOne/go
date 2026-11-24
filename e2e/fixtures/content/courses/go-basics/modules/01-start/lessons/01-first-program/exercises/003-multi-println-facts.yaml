@@ -1,0 +1,30 @@
+id: go-basics.start.first-program.multi-println-facts
+type: mcq_multi
+difficulty: 3
+concepts:
+  - { id: go.basics.println, weight: 1 }
+estimatedSeconds: 50
+prompt: |
+  `fmt.Println`에 대한 설명으로 맞는 것을 모두 고르세요.
+spec:
+  options:
+    - id: a
+      text: 괄호 안의 값을 화면에 보여 준다
+    - id: b
+      text: 한 번 호출하면 출력에 한 줄이 생긴다
+    - id: c
+      text: 출력한 값을 저장해 두었다가 다음 줄에서 돌려준다
+      misconception: go.mc.println-is-return
+      rationale: fmt.Println은 보여 주기만 하고 값을 저장하지 않아요.
+  correct: [a, b]
+misconceptions: [go.mc.println-is-return]
+hints:
+  - 정답이 하나가 아닐 수 있어요.
+  - fmt.Println이 하는 일은 "보여 주기"예요.
+  - 보여 주는 것과 저장하는 것은 다른 일이에요.
+explanation: |
+  fmt.Println은 괄호 안의 값을 한 줄로 **보여 주기만** 해요. 출력한 값을 저장해 두지 않아요.
+origin: authored
+review:
+  status: draft
+  draftedBy: ai:claude

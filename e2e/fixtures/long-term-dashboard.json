@@ -1,0 +1,555 @@
+{
+  "/dashboard": {
+    "date": "2026-12-16",
+    "activeMinutesToday": 18,
+    "reviewDueCount": 1,
+    "continueLesson": {
+      "id": "go-basics.values.variables",
+      "title": "변수 선언",
+      "status": "practicing",
+      "readProgress": 1,
+      "practiceSetId": null
+    }
+  },
+  "/daily-plan": {
+    "date": "2026-12-16",
+    "goal": {
+      "dailyMinutes": 30,
+      "weeklyDays": 5,
+      "targetCourse": {
+        "id": "go-basics",
+        "title": "Go 기초"
+      },
+      "targetDate": "2027-03-31",
+      "effectiveFrom": 1794808801018,
+      "isDefault": false
+    },
+    "activeMinutesToday": 18,
+    "budgetMinutes": 12,
+    "goalMet": false,
+    "mode": "plan",
+    "blocks": [
+      {
+        "kind": "review",
+        "minutes": 2,
+        "reason": {
+          "code": "reviews_due",
+          "count": 1,
+          "overdueCount": 1
+        },
+        "concepts": [
+          {
+            "id": "go.basics.println",
+            "title": "fmt.Println으로 출력하기"
+          }
+        ],
+        "lesson": null,
+        "partial": false
+      },
+      {
+        "kind": "weakness",
+        "minutes": 11,
+        "reason": {
+          "code": "weak_concepts",
+          "topEffective": 15.19875
+        },
+        "concepts": [
+          {
+            "id": "go.vars.var",
+            "title": "var 선언"
+          },
+          {
+            "id": "go.vars.const",
+            "title": "const 선언"
+          },
+          {
+            "id": "go.vars.reassign",
+            "title": "재할당"
+          }
+        ],
+        "lesson": null,
+        "partial": false
+      }
+    ],
+    "later": [],
+    "totalMinutes": 13,
+    "pace": {
+      "status": "on_track",
+      "targetDate": "2027-03-31",
+      "remainingMinutes": 12,
+      "studyDaysLeft": 75,
+      "requiredPerDay": 0.16,
+      "newLearningBudget": 18,
+      "suggestedDailyMinutes": 5,
+      "suggestedTargetDate": "2026-12-17",
+      "calibration": 1
+    }
+  },
+  "/goals": {
+    "date": "2026-12-16",
+    "goal": {
+      "dailyMinutes": 30,
+      "weeklyDays": 5,
+      "targetCourse": {
+        "id": "go-basics",
+        "title": "Go 기초"
+      },
+      "targetDate": "2027-03-31",
+      "effectiveFrom": 1794808801018,
+      "isDefault": false
+    },
+    "pace": {
+      "status": "on_track",
+      "targetDate": "2027-03-31",
+      "remainingMinutes": 12,
+      "studyDaysLeft": 75,
+      "requiredPerDay": 0.16,
+      "newLearningBudget": 18,
+      "suggestedDailyMinutes": 5,
+      "suggestedTargetDate": "2026-12-17",
+      "calibration": 1
+    },
+    "week": {
+      "weekStart": "2026-12-14",
+      "studiedDays": 3,
+      "goalDays": 0,
+      "weeklyDays": 5,
+      "achieved": false,
+      "activeMinutes": 64,
+      "days": [
+        {
+          "date": "2026-12-14",
+          "activeMinutes": 23,
+          "studied": true,
+          "goalMet": false
+        },
+        {
+          "date": "2026-12-15",
+          "activeMinutes": 23,
+          "studied": true,
+          "goalMet": false
+        },
+        {
+          "date": "2026-12-16",
+          "activeMinutes": 18,
+          "studied": true,
+          "goalMet": false
+        },
+        {
+          "date": "2026-12-17",
+          "activeMinutes": 0,
+          "studied": false,
+          "goalMet": false
+        },
+        {
+          "date": "2026-12-18",
+          "activeMinutes": 0,
+          "studied": false,
+          "goalMet": false
+        },
+        {
+          "date": "2026-12-19",
+          "activeMinutes": 0,
+          "studied": false,
+          "goalMet": false
+        },
+        {
+          "date": "2026-12-20",
+          "activeMinutes": 0,
+          "studied": false,
+          "goalMet": false
+        }
+      ]
+    },
+    "streakWeeks": 4
+  },
+  "/mastery": {
+    "date": "2026-12-16",
+    "courses": [
+      {
+        "id": "go-basics",
+        "title": "Go 기초",
+        "language": "go",
+        "lessons": {
+          "total": 2,
+          "completed": 1
+        },
+        "stageCounts": {
+          "not_started": 0,
+          "introduced": 2,
+          "practicing": 3,
+          "proficient": 0,
+          "mastered": 0
+        },
+        "modules": [
+          {
+            "id": "go-basics.start",
+            "title": "시작하기",
+            "lessons": {
+              "total": 1,
+              "completed": 1
+            },
+            "concepts": [
+              {
+                "id": "go.basics.statement",
+                "title": "문장과 실행 순서",
+                "importance": "standard",
+                "stage": "practicing",
+                "effective": 71.17633411839999,
+                "reviewDue": false,
+                "nextReviewDate": "2026-12-20",
+                "misconceptions": []
+              },
+              {
+                "id": "go.basics.println",
+                "title": "fmt.Println으로 출력하기",
+                "importance": "core",
+                "stage": "practicing",
+                "effective": 61.51101531209763,
+                "reviewDue": true,
+                "nextReviewDate": "2026-11-17",
+                "misconceptions": []
+              }
+            ]
+          },
+          {
+            "id": "go-basics.values",
+            "title": "값과 변수",
+            "lessons": {
+              "total": 1,
+              "completed": 0
+            },
+            "concepts": [
+              {
+                "id": "go.vars.var",
+                "title": "var 선언",
+                "importance": "core",
+                "stage": "introduced",
+                "effective": 15.19875,
+                "reviewDue": false,
+                "nextReviewDate": "2026-12-25",
+                "misconceptions": []
+              },
+              {
+                "id": "go.vars.const",
+                "title": "const 선언",
+                "importance": "core",
+                "stage": "practicing",
+                "effective": 25.520624499999993,
+                "reviewDue": false,
+                "nextReviewDate": "2026-12-17",
+                "misconceptions": [
+                  {
+                    "id": "go.mc.const-reassign",
+                    "title": "const도 다시 대입할 수 있다고 생각함",
+                    "status": "confirmed"
+                  }
+                ]
+              },
+              {
+                "id": "go.vars.reassign",
+                "title": "재할당",
+                "importance": "standard",
+                "stage": "introduced",
+                "effective": 20.019999999999996,
+                "reviewDue": false,
+                "nextReviewDate": "2026-12-25",
+                "misconceptions": []
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "/review-queue": {
+    "date": "2026-12-16",
+    "budgetMinutes": 15,
+    "due": [
+      {
+        "conceptId": "go.basics.println",
+        "title": "fmt.Println으로 출력하기",
+        "dueAt": 1794912403275,
+        "overdue": true,
+        "overdueDays": 29,
+        "itemCount": 1,
+        "estimatedSeconds": 90,
+        "priority": 37.71625127893519
+      }
+    ],
+    "deferred": [],
+    "estimatedMinutes": 2
+  },
+  "/weak-concepts": {
+    "concepts": [
+      {
+        "concept": {
+          "id": "go.vars.var",
+          "title": "var 선언"
+        },
+        "weakness": 110.241625,
+        "effective": 15.19875,
+        "stage": "introduced",
+        "consecutiveFailures": 0,
+        "factors": {
+          "gap": 84.80125,
+          "importanceFactor": 1.3,
+          "misconceptionFactor": 1,
+          "failureFactor": 1
+        },
+        "misconceptions": [],
+        "prerequisites": [
+          {
+            "concept": {
+              "id": "go.basics.statement",
+              "title": "문장과 실행 순서"
+            },
+            "stage": "practicing",
+            "effective": 71.17633411839999,
+            "weak": false
+          }
+        ]
+      },
+      {
+        "concept": {
+          "id": "go.vars.const",
+          "title": "const 선언"
+        },
+        "weakness": 96.82318815000001,
+        "effective": 25.520624499999993,
+        "stage": "practicing",
+        "consecutiveFailures": 0,
+        "factors": {
+          "gap": 74.4793755,
+          "importanceFactor": 1.3,
+          "misconceptionFactor": 1,
+          "failureFactor": 1
+        },
+        "misconceptions": [
+          {
+            "id": "go.mc.const-reassign",
+            "title": "const도 다시 대입할 수 있다고 생각함",
+            "status": "confirmed"
+          }
+        ],
+        "prerequisites": [
+          {
+            "concept": {
+              "id": "go.vars.var",
+              "title": "var 선언"
+            },
+            "stage": "introduced",
+            "effective": 15.19875,
+            "weak": true
+          }
+        ]
+      },
+      {
+        "concept": {
+          "id": "go.vars.reassign",
+          "title": "재할당"
+        },
+        "weakness": 79.98,
+        "effective": 20.019999999999996,
+        "stage": "introduced",
+        "consecutiveFailures": 0,
+        "factors": {
+          "gap": 79.98,
+          "importanceFactor": 1,
+          "misconceptionFactor": 1,
+          "failureFactor": 1
+        },
+        "misconceptions": [],
+        "prerequisites": [
+          {
+            "concept": {
+              "id": "go.vars.var",
+              "title": "var 선언"
+            },
+            "stage": "introduced",
+            "effective": 15.19875,
+            "weak": true
+          }
+        ]
+      },
+      {
+        "concept": {
+          "id": "go.basics.println",
+          "title": "fmt.Println으로 출력하기"
+        },
+        "weakness": 50.03568010213727,
+        "effective": 61.51101530604826,
+        "stage": "practicing",
+        "consecutiveFailures": 0,
+        "factors": {
+          "gap": 38.48898469395174,
+          "importanceFactor": 1.3,
+          "misconceptionFactor": 1,
+          "failureFactor": 1
+        },
+        "misconceptions": [],
+        "prerequisites": [
+          {
+            "concept": {
+              "id": "go.basics.statement",
+              "title": "문장과 실행 순서"
+            },
+            "stage": "practicing",
+            "effective": 71.17633411839999,
+            "weak": false
+          }
+        ]
+      },
+      {
+        "concept": {
+          "id": "go.basics.statement",
+          "title": "문장과 실행 순서"
+        },
+        "weakness": 28.823665881600007,
+        "effective": 71.17633411839999,
+        "stage": "practicing",
+        "consecutiveFailures": 0,
+        "factors": {
+          "gap": 28.823665881600007,
+          "importanceFactor": 1,
+          "misconceptionFactor": 1,
+          "failureFactor": 1
+        },
+        "misconceptions": [],
+        "prerequisites": []
+      }
+    ],
+    "suggested": ["go.vars.var", "go.vars.const", "go.vars.reassign"]
+  },
+  "/activity/recent": {
+    "date": "2026-12-16",
+    "items": [
+      {
+        "type": "practice",
+        "id": "01KCKX0000000000000000RV29",
+        "at": 1797315300000,
+        "date": "2026-12-15",
+        "setKind": "review",
+        "status": "completed",
+        "lesson": null,
+        "concepts": [
+          {
+            "id": "go.basics.println",
+            "title": "fmt.Println으로 출력하기"
+          },
+          {
+            "id": "go.vars.var",
+            "title": "var 선언"
+          },
+          {
+            "id": "go.vars.const",
+            "title": "const 선언"
+          }
+        ],
+        "conceptCount": 3,
+        "total": 3,
+        "answered": 3,
+        "correct": 2,
+        "stageUps": 0,
+        "lessonCompleted": false,
+        "assessment": null
+      },
+      {
+        "type": "practice",
+        "id": "01KCKX0000000000000000RV28",
+        "at": 1797228900000,
+        "date": "2026-12-14",
+        "setKind": "review",
+        "status": "completed",
+        "lesson": null,
+        "concepts": [
+          {
+            "id": "go.basics.statement",
+            "title": "문장과 실행 순서"
+          },
+          {
+            "id": "go.vars.const",
+            "title": "const 선언"
+          }
+        ],
+        "conceptCount": 2,
+        "total": 2,
+        "answered": 2,
+        "correct": 2,
+        "stageUps": 1,
+        "lessonCompleted": false,
+        "assessment": null
+      },
+      {
+        "type": "practice",
+        "id": "01KCKX0000000000000000RV25",
+        "at": 1796969700000,
+        "date": "2026-12-11",
+        "setKind": "review",
+        "status": "completed",
+        "lesson": null,
+        "concepts": [
+          {
+            "id": "go.vars.var",
+            "title": "var 선언"
+          }
+        ],
+        "conceptCount": 1,
+        "total": 1,
+        "answered": 1,
+        "correct": 1,
+        "stageUps": 0,
+        "lessonCompleted": false,
+        "assessment": null
+      },
+      {
+        "type": "practice",
+        "id": "01KCKX0000000000000000RV24",
+        "at": 1796883300000,
+        "date": "2026-12-10",
+        "setKind": "review",
+        "status": "completed",
+        "lesson": null,
+        "concepts": [
+          {
+            "id": "go.vars.const",
+            "title": "const 선언"
+          },
+          {
+            "id": "go.basics.println",
+            "title": "fmt.Println으로 출력하기"
+          }
+        ],
+        "conceptCount": 2,
+        "total": 3,
+        "answered": 3,
+        "correct": 1,
+        "stageUps": 0,
+        "lessonCompleted": false,
+        "assessment": null
+      },
+      {
+        "type": "practice",
+        "id": "01KCKX0000000000000000RV23",
+        "at": 1796796900000,
+        "date": "2026-12-09",
+        "setKind": "review",
+        "status": "completed",
+        "lesson": null,
+        "concepts": [
+          {
+            "id": "go.basics.statement",
+            "title": "문장과 실행 순서"
+          }
+        ],
+        "conceptCount": 1,
+        "total": 1,
+        "answered": 1,
+        "correct": 1,
+        "stageUps": 1,
+        "lessonCompleted": false,
+        "assessment": null
+      }
+    ]
+  }
+}

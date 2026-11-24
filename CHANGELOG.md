@@ -17,6 +17,8 @@
 - 예시 과정 `go-basics`(레슨 2개, 선택형 문제 6개): 프로그램의 모양과 `fmt.Println`, `:=`와 `=`
 - `go-basics` 시작하기 모듈의 AI 교차 검토: 문제 6개 승인(배포용 `content.db`에 포함), 지문·선택지 이유·힌트 일부 수정([검토 기록](/docs/reviews/2026-11-23-go-basics-start-review.md))
 - CI에 콘텐츠 검사 단계 추가
+- 브라우저 E2E(`e2e/`, Playwright 1.65.1): 앱 셸·테마·백업·보안, 레슨 읽기와 본문 이해도 확인, 선택형 연습 세트와 단원 완료, 다음 날 복습, 오답 노트, 단원 평가, 과정 진도, 선수 개념 경고, 첫 실행과 한 달 학습 여정, 설정, AI 튜터(가짜 제공자), 390px 화면, 다이어그램, WCAG 2.2 AA 접근성 검사, 시각 회귀. CI에 두 번째 검사 `e2e · visual · a11y` 추가, 기준 이미지 다시 만들기(`pnpm test:e2e:visual`, `visual-baselines` 워크플로)
+- 문서: 테스트 가이드
 - 저장소 뼈대: pnpm 작업 공간, TypeScript·ESLint·Prettier·Vitest·dependency-cruiser 설정, CI(`lint · typecheck · test · build`), 문서(결정 기록, 용어집, 기여 가이드)
 - 문서: Go 앱의 형태와 저장소 운영(G-001)
 
