@@ -91,7 +91,7 @@ describe('설정 > 학습 방식', () => {
 });
 
 describe('설정 > 화면', () => {
-  it('applies the lesson size and the dark workbench', async () => {
+  it('applies the lesson size and does not offer the workbench theme', async () => {
     const user = userEvent.setup();
     const { handler } = settingsApi();
     const { calls } = renderApp('/settings/appearance', handler);
@@ -100,13 +100,9 @@ describe('설정 > 화면', () => {
     await waitFor(() => {
       expect(document.documentElement.style.getPropertyValue('--lesson-font-size')).toBe('1.25rem');
     });
-    await user.click(screen.getByRole('radio', { name: /어둡게/ }));
-    await waitFor(() => {
-      expect(document.documentElement.dataset['workbench']).toBe('dark');
-    });
+    expect(screen.queryByRole('radiogroup', { name: '작업대 테마' })).toBeNull();
     expect(calls.filter((c) => c.method === 'PATCH').map((c) => c.body)).toEqual([
       { 'lesson.fontSize': 'large' },
-      { 'appearance.workbench': 'dark' },
     ]);
   });
 });

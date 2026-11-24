@@ -400,8 +400,7 @@
    * The code tokens resolve their light-dark() at :root, so the dark values are set here
    * explicitly (the same pairs core's check:contrast verifies for dark mode).
    */
-  .lesson-prose .lesson-code,
-  .lesson-example__editor {
+  .lesson-prose .lesson-code {
     color-scheme: dark;
     --code-bg: var(--neutral-900);
     --code-surface: var(--neutral-900);
@@ -592,32 +591,7 @@
     padding: 0 0.35em;
     background: var(--color-bg-surface);
   }
-  .lesson-example {
-    border: 1px solid var(--color-border-default);
-    border-radius: var(--radius-lg);
-    overflow: hidden;
-    background: var(--color-bg-subtle);
-  }
-  .lesson-example .lesson-code {
-    border: 0;
-    border-radius: 0;
-  }
-  .lesson-example__header,
-  .lesson-example__footer {
-    display: flex;
-    justify-content: space-between;
-    gap: var(--space-3);
-    padding: var(--space-3) var(--space-4);
-    font: var(--text-small);
-    background: var(--color-bg-subtle);
-  }
-  .lesson-example__header {
-    font-weight: 700;
-    color: var(--color-text-heading);
-  }
-  .lesson-example__footer {
-    justify-content: flex-end;
-  }
+
   .lesson-inline-exercise {
     display: flex;
     align-items: center;

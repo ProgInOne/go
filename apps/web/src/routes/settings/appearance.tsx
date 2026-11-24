@@ -1,4 +1,4 @@
-import { LESSON_FONT_SIZES, THEMES, WORKBENCH_THEMES, type Settings } from '@proginone/shared';
+import { LESSON_FONT_SIZES, THEMES, type Settings } from '@proginone/shared';
 import { ErrorState, RadioGroup, Skeleton } from '@proginone/ui';
 import { createFileRoute } from '@tanstack/react-router';
 import { useSettings } from '../../api/queries.ts';
@@ -21,15 +21,11 @@ const SIZE_LABELS: Record<Settings['lesson.fontSize'], { label: string; descript
   large: { label: '크게', description: '20px' },
 };
 
-const WORKBENCH_LABELS: Record<
-  Settings['appearance.workbench'],
-  { label: string; description: string }
-> = {
-  light: { label: '밝게', description: '밝은 바탕의 코드 에디터와 콘솔 (기본)' },
-  dark: { label: '어둡게', description: '실습의 코드 에디터와 콘솔만 어둡게' },
-};
-
-/** 설정 > 화면 (ui-ux.md#설정): theme, lesson body size (17/18/20px), workbench theme (D-024). */
+/**
+ * 설정 > 화면 (ui-ux.md#설정): theme and lesson body size (17/18/20px). The dark workbench
+ * setting (JS D-024: editor and console colours) stays in the shared settings schema but is not
+ * shown: this app has no code editor or console until Go code execution is designed (G-001).
+ */
 function AppearanceSettings() {
   const settings = useSettings();
   const { save, pending } = useSaveSetting();
@@ -66,18 +62,6 @@ function AppearanceSettings() {
               options={LESSON_FONT_SIZES.map((s) => ({ value: s, ...SIZE_LABELS[s] }))}
               onValueChange={(value) => {
                 save({ 'lesson.fontSize': value as Settings['lesson.fontSize'] }, '글자 크기');
-              }}
-            />
-            <RadioGroup
-              legend="작업대 테마"
-              value={settings.data['appearance.workbench']}
-              disabled={pending}
-              options={WORKBENCH_THEMES.map((w) => ({ value: w, ...WORKBENCH_LABELS[w] }))}
-              onValueChange={(value) => {
-                save(
-                  { 'appearance.workbench': value as Settings['appearance.workbench'] },
-                  '작업대 테마',
-                );
               }}
             />
           </>

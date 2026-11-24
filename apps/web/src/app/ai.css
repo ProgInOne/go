@@ -157,11 +157,7 @@
     color: var(--color-feedback-incorrect-fg);
     font-weight: 700;
   }
-  .ai-usage__notes {
-    grid-column: 2 / -1;
-    font: var(--text-small);
-    color: var(--color-text-secondary);
-  }
+
   .ai-models {
     display: grid;
     gap: var(--space-2);

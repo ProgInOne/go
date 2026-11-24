@@ -28,7 +28,7 @@ describe('groupSteps', () => {
     expect(steps.map((s) => [s.label, s.sectionIds])).toEqual([
       ['왜 배울까', ['objectives', 'prerequisites', 'intro']],
       ['원리', ['principle']],
-      ['직접 해 보기', ['examples', 'walkthrough']],
+      ['예제 따라가기', ['examples', 'walkthrough']],
       ['주의', ['pitfalls', 'in-practice']],
       ['확인', ['check', 'practice', 'summary', 'next']],
     ]);

@@ -94,10 +94,6 @@ export function AiDataScope() {
       <h3 className="ai-settings__section-title">보내는 것 (AI를 쓸 때만)</h3>
       <ul className="ai-data-scope__list">
         <li>질문, 그리고 지금 보고 있는 레슨·문제의 내용</li>
-        <li>
-          내 코드와 마지막 실행 결과 (튜터 창의 &quot;내 코드&quot;·&quot;실행 결과&quot;를 빼면
-          보내지 않아요)
-        </li>
         <li>관련 개념의 숙련도, 진행 중인 오개념, 이 문제의 최근 풀이 기록</li>
         <li>이 문제·단원의 이전 대화와 지난 대화의 요약</li>
         <li>힌트와 정답은 내가 이미 열어 본 만큼만 보내요. 단원 평가 중에는 AI를 쓸 수 없어요.</li>

@@ -114,7 +114,8 @@ describe('settings AI section', () => {
     expect(within(scope).getByText(/학습 기록은 이 컴퓨터에만 저장돼요/)).toBeVisible();
     const [sent, notSent] = within(scope).getAllByRole('list');
     if (!sent || !notSent) throw new Error('lists missing');
-    expect(within(sent).getByText(/내 코드와 마지막 실행 결과/)).toBeVisible();
+    // No code or run results yet: the Go app has no code execution (G-001).
+    expect(within(sent).queryByText(/실행 결과/)).toBeNull();
     expect(within(sent).getByText(/이미 열어 본 만큼만/)).toBeVisible();
     expect(within(notSent).getByText(/계정 정보/)).toBeVisible();
     expect(within(scope).getByText(/데이터 정책/)).toBeVisible();
