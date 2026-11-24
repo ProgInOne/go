@@ -9,7 +9,7 @@
     "node": ">=24"
   },
   "scripts": {
-    "dev": "pnpm --filter @proginone/server dev",
+    "dev": "pnpm --parallel --filter @proginone/server --filter @proginone/web dev",
     "start": "pnpm --filter @proginone/server start",
     "lint": "eslint .",
     "format": "prettier --write .",
@@ -23,15 +23,18 @@
     "build": "pnpm -r --if-present build",
     "check:deps": "depcruise apps packages tools --config .dependency-cruiser.cjs",
     "check:links": "node tools/check-links.mjs",
-    "check": "pnpm lint && pnpm format:check && pnpm typecheck && pnpm check:deps && pnpm test && pnpm content:check && pnpm check:links"
+    "check": "pnpm lint && pnpm format:check && pnpm typecheck && pnpm check:deps && pnpm test && pnpm content:check && pnpm check:links",
+    "check:bundle": "node tools/check-bundle.mjs"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@types/node": "^24.19.2",
     "dependency-cruiser": "^18.7.2",
     "eslint": "^10.15.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
     "globals": "^17.14.0",
     "prettier": "^3.10.1",
+    "prettier-plugin-tailwindcss": "^0.8.1",
     "typescript": "~6.0.3",
     "typescript-eslint": "^8.72.2",
     "vitest": "^5.1.0"

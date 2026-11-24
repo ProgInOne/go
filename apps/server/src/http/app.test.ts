@@ -71,7 +71,7 @@ describe('security middleware', () => {
   it.each([
     ['opaque origin', 'null'],
     ['foreign site', 'https://evil.example'],
-    ['vite dev origin in production', 'http://127.0.0.1:5173'],
+    ['vite dev origin in production', 'http://127.0.0.1:5174'],
   ])('rejects /api from %s', async (_, origin) => {
     const res = await setup().req('/api/v1/health', { origin });
     expect(res.status).toBe(403);
@@ -80,7 +80,7 @@ describe('security middleware', () => {
 
   it('allows the Vite dev origin in development', async () => {
     const res = await setup('development').req('/api/v1/health', {
-      origin: 'http://127.0.0.1:5173',
+      origin: 'http://127.0.0.1:5174',
     });
     expect(res.status).toBe(200);
   });
