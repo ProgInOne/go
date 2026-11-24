@@ -1,0 +1,31 @@
+id: go-basics.values.variables.mcq-const
+type: mcq_single
+difficulty: 2
+concepts:
+  - { id: go.vars.const, weight: 1 }
+estimatedSeconds: 50
+prompt: |
+  `const limit = 3` 다음 줄에 `limit = 5`를 적으면 어떻게 되나요?
+spec:
+  options:
+    - id: a
+      text: 컴파일 오류가 난다
+    - id: b
+      text: '`limit`이 5가 된다'
+      misconception: go.mc.const-reassign
+      rationale: const 상수에는 다시 대입할 수 없어요.
+    - id: c
+      text: '`limit`이 3 그대로 남고 아무 일도 없다'
+      rationale: 조용히 무시되지 않고 컴파일 오류로 알려 줘요.
+  correct: a
+misconceptions: [go.mc.const-reassign]
+hints:
+  - const는 상수(constant)의 줄임말이에요.
+  - 상수는 값이 정해지면 바뀌지 않아요.
+  - Go는 이런 실수를 실행 전에 알려 줘요.
+explanation: |
+  정답은 **컴파일 오류가 난다**예요. const 상수에는 다시 대입할 수 없어요.
+origin: authored
+review:
+  status: draft
+  draftedBy: ai:claude

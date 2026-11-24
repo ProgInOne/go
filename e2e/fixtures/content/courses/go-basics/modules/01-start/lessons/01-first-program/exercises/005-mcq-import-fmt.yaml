@@ -1,0 +1,29 @@
+id: go-basics.start.first-program.mcq-import-fmt
+type: mcq_single
+difficulty: 1
+concepts:
+  - { id: go.basics.println, weight: 1 }
+estimatedSeconds: 40
+prompt: |
+  `fmt.Println`을 쓰려면 파일 위쪽에 무엇을 적어야 하나요?
+spec:
+  options:
+    - id: a
+      text: '`import "fmt"`'
+    - id: b
+      text: '`package fmt`'
+      rationale: 실행할 프로그램은 `package main`이에요. fmt는 가져오는 패키지예요.
+    - id: c
+      text: 아무것도 적지 않아도 된다
+      rationale: 가져오지 않은 패키지는 쓸 수 없어요.
+  correct: a
+hints:
+  - fmt는 표준 라이브러리 패키지예요.
+  - 다른 패키지를 쓰려면 가져와야 해요.
+  - 가져오는 문장은 import로 시작해요.
+explanation: |
+  정답은 **`import "fmt"`**예요. 표준 라이브러리 패키지도 import로 가져와야 쓸 수 있어요.
+origin: authored
+review:
+  status: draft
+  draftedBy: ai:claude

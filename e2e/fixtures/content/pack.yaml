@@ -1,0 +1,9 @@
+id: e2e-fixture
+version: 2026.11.24.1
+schemaVersion: 1
+title: E2E 픽스처
+tracks:
+  - id: go-foundations
+    title: Go 기초
+    summary: Go 프로그램의 모양을 익히고 값을 출력하고 변수에 담는 기본기를 배웁니다.
+    courses: [go-basics]

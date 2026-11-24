@@ -1,0 +1,70 @@
+<Section kind="objectives">
+- `fmt.Println`으로 원하는 값을 출력할 수 있어요.
+- 여러 문장이 어떤 순서로 실행되는지 예측할 수 있어요.
+</Section>
+
+<Section kind="prerequisites" />
+
+<Section kind="intro">
+프로그램이 무엇을 하고 있는지 알려면 **결과를 눈으로 확인**할 방법이 필요합니다.
+Go에서는 <ConceptLink to="go.basics.println">fmt.Println</ConceptLink>이 그 역할을 합니다.
+</Section>
+
+<Section kind="principle">
+`main` 함수 안의 문장은 위에서 아래로 **한 문장씩** 실행됩니다.
+
+<CompareTable columns={["코드", "결과"]}>
+<Row label="숫자">`fmt.Println(1)` | `1`</Row>
+<Row label="문자열">`fmt.Println("안녕")` | `안녕`</Row>
+</CompareTable>
+</Section>
+
+<Section kind="examples">
+```go
+package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("안녕하세요")
+	fmt.Println(1 + 2)
+}
+```
+</Section>
+
+<Section kind="walkthrough">
+첫 줄은 문자열을 그대로 출력하고, 둘째 줄은 `1 + 2`를 계산한 `3`을 출력합니다.
+</Section>
+
+<Section kind="pitfalls">
+<Pitfall misconception="go.mc.println-is-return">
+<Wrong>출력한 값은 어딘가에 저장된다.</Wrong>
+<Actual>화면에 보여 줄 뿐, 값을 저장하지 않는다.</Actual>
+<Right>값을 나중에 쓰려면 변수에 담아야 한다.</Right>
+</Pitfall>
+</Section>
+
+<Section kind="in-practice">
+<Callout kind="tip" title="터미널에서 실행하기">
+터미널에서 `go run main.go`를 입력하고 <Key>Enter</Key>를 누르면 프로그램을 실행할 수 있어요.
+</Callout>
+</Section>
+
+<Section kind="check">
+읽은 내용을 바로 확인해 봅시다.
+
+<InlineExercise ref="go-basics.start.first-program.check-first-line" />
+
+<InlineExercise ref="go-basics.start.first-program.check-println-role" />
+</Section>
+
+<Section kind="practice" />
+
+<Section kind="summary">
+- `fmt.Println(값)`은 값을 화면에 출력합니다.
+- 문장은 위에서 아래로 실행됩니다.
+</Section>
+
+<Section kind="next">
+다음 단원에서는 값에 이름을 붙이는 변수를 배웁니다.
+</Section>

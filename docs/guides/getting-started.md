@@ -56,4 +56,7 @@ pnpm build && pnpm start # 프로덕션 모드: http://127.0.0.1:4311 (브라우
 pnpm test    # 단위·API·컴포넌트 테스트(서버는 임시 폴더의 user.db와 테스트용 content.db, 웹은 jsdom과 가짜 API)
 pnpm check   # lint, 포맷, 타입, 의존 규칙, 테스트, 콘텐츠 검사, 문서 링크
 pnpm build && pnpm check:bundle   # 첫 화면 번들 예산
+pnpm test:e2e                     # 브라우저 E2E·접근성(Playwright, 시각 회귀 제외)
 ```
+
+자세한 내용은 [테스트 가이드](testing.md)에 있습니다.

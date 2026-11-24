@@ -2,6 +2,7 @@ packages:
   - apps/*
   - packages/*
   - tools/*
+  - e2e
 
 # Dependency build scripts are opt-in. esbuild's postinstall only re-validates the binary that
 # its platform package already ships, so it stays off.
@@ -12,3 +13,7 @@ minimumReleaseAgeExclude:
   # Our own packages: ProgInOne/core publishes `next` snapshots minutes before this repository
   # uses them.
   - '@proginone/*'
+  # Playwright is pinned to the version of the CI container image (mcr.microsoft.com/playwright).
+  - '@playwright/test@1.65.1'
+  - playwright-core@1.65.1
+  - playwright@1.65.1
