@@ -55,7 +55,7 @@ export interface AppDeps {
 export type { AppEnv } from './env.ts';
 
 /** Vite dev server origins allowed to call the API in development (it proxies /api). */
-const DEV_ORIGINS = ['http://127.0.0.1:5173', 'http://localhost:5173'];
+const DEV_ORIGINS = ['http://127.0.0.1:5174', 'http://localhost:5174'];
 
 export function createApp({
   config,

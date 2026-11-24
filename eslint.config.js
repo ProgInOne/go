@@ -1,5 +1,6 @@
 // @ts-check
 import js from '@eslint/js';
+import reactHooks from 'eslint-plugin-react-hooks';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
@@ -13,6 +14,7 @@ export default tseslint.config(
       '.claude/**',
       '**/playwright-report/**',
       '**/test-results/**',
+      '**/routeTree.gen.ts',
     ],
   },
   js.configs.recommended,
@@ -23,7 +25,7 @@ export default tseslint.config(
       globals: { ...globals.node },
       parserOptions: {
         projectService: {
-          allowDefaultProject: ['*.js', '*.cjs', '*.mjs', 'tools/*.mjs'],
+          allowDefaultProject: ['*.js', '*.cjs', '*.mjs', 'tools/*.mjs', 'apps/web/vite.config.ts'],
         },
         tsconfigRootDir: import.meta.dirname,
       },
@@ -41,8 +43,35 @@ export default tseslint.config(
     },
   },
   {
+    // 웹은 학습 엔진에 의존하지 않습니다. 학습 판단은 서버가 합니다. 엔진은 배포 패키지
+    // (ProgInOne/core)라 dependency-cruiser가 따라가지 않으므로 규칙을 여기 둡니다.
+    files: ['apps/web/**/*.{ts,tsx}'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: [
+            {
+              name: '@proginone/learning-engine',
+              message: 'apps/web은 learning-engine에 의존하지 않습니다. 학습 판단은 서버가 합니다.',
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    files: ['apps/web/src/**/*.{ts,tsx}'],
+    ...reactHooks.configs.flat['recommended-latest'],
+    languageOptions: { globals: { ...globals.browser } },
+  },
+  {
     files: ['**/*.js', '**/*.cjs', '**/*.mjs'],
     ...tseslint.configs.disableTypeChecked,
+  },
+  {
+    files: ['apps/web/public/**/*.js'],
+    languageOptions: { globals: { ...globals.browser } },
   },
   {
     // 개발 도구 스크립트는 콘솔 출력이 곧 인터페이스입니다.
