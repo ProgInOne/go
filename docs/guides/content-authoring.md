@@ -18,6 +18,8 @@ Go 과정의 콘텐츠를 쓰고 검사하고 `content.db`로 빌드하는 방�
 
 MDX 컴포넌트는 `Section`, `InlineExercise`, `Callout`, `CompareTable`/`Row`, `ConceptLink`, `Pitfall`/`Wrong`/`Actual`/`Right`, `Diagram`, `Figure`, `Reveal`, `Key`만 씁니다. JavaScript 저장소의 `RunnableExample`, `TryIt`, `ValueTrace`, `MdnLink`는 실행이 필요하거나 JavaScript 전용이라 없습니다. 실행 예제와 "직접 써 보기"는 Go 코드 실행 방식과 함께 정합니다.
 
+섹션 종류는 JavaScript 저장소와 같습니다. 다만 `walkthrough` 섹션은 실행 결과가 아니라 예제를 한 줄씩 따라가는 해설로 씁니다. 화면 제목은 "단계별 해설"이고, 레슨 화면에서는 `examples`와 함께 "예제 따라가기" 단계로 묶입니다.
+
 ## 디렉터리 구조
 
 ```text

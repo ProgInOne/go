@@ -15,7 +15,7 @@ export interface StepDef {
 export const STEP_DEFS: readonly StepDef[] = [
   { key: 'why', label: '왜 배울까', kinds: ['objectives', 'prerequisites', 'intro'] },
   { key: 'principle', label: '원리', kinds: ['principle'] },
-  { key: 'try', label: '직접 해 보기', kinds: ['examples', 'walkthrough'] },
+  { key: 'try', label: '예제 따라가기', kinds: ['examples', 'walkthrough'] },
   { key: 'caution', label: '주의', kinds: ['pitfalls', 'in-practice'] },
   { key: 'check', label: '확인', kinds: ['check', 'practice', 'summary', 'next'] },
 ];
