@@ -1,0 +1,52 @@
+id: go-basics.start.first-program.write-two-lines
+type: implement_function
+difficulty: 2
+concepts:
+  - { id: go.basics.println, weight: 1 }
+tags: [println, write-program]
+estimatedSeconds: 180
+prompt: |
+  아래처럼 두 줄을 출력하는 프로그램을 완성하세요. 둘째 줄의 `3`은 `1+2`를 계산해서 출력해요.
+
+  ```text
+  안녕, Go!
+  1 + 2 = 3
+  ```
+spec:
+  starter: |
+    package main
+
+    import "fmt"
+
+    func main() {
+    	fmt.Println("안녕, Go!")
+    }
+  solution: |
+    package main
+
+    import "fmt"
+
+    func main() {
+    	fmt.Println("안녕, Go!")
+    	fmt.Println("1 + 2 =", 1+2)
+    }
+  checks:
+    - id: output
+      kind: stdout
+      text: "안녕, Go!\n1 + 2 = 3"
+      description: 두 줄이 위와 똑같이 출력됨
+hints:
+  - 한 줄을 더 출력하려면 무엇을 한 번 더 쓰면 될까요?
+  - '`fmt.Println`에 값을 여러 개 주면 사이에 공백이 들어가요.'
+  - '글자 `"1 + 2 ="`와 계산할 식 `1+2`를 쉼표로 나눠 넘겨 보세요.'
+explanation: |
+  `main` 안에 `fmt.Println("1 + 2 =", 1+2)`를 한 줄 더 써요.
+
+  따옴표 안의 `"1 + 2 ="`는 글자 그대로, 따옴표 밖의 `1+2`는 계산한 `3`으로 출력돼요. 값이 두 개라서 사이에 공백이 들어가 `1 + 2 = 3`이 돼요.
+
+  `"1 + 2 = "`처럼 따옴표 안 끝에도 공백을 넣으면 공백이 두 개가 되어 `1 + 2 =  3`이 출력되고 채점에서 틀려요.
+origin: authored
+review:
+  status: approved
+  draftedBy: ai:claude
+  reviewedBy: ai:reviewer

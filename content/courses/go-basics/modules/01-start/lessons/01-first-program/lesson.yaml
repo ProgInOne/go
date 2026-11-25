@@ -10,4 +10,4 @@ objectives:
   - Go 프로그램의 세 부분(package, import, func main)을 구분할 수 있다.
   - fmt.Println이 값을 어떤 모양으로 출력하는지 예측할 수 있다.
 practice:
-  targetCount: 3
+  targetCount: 5

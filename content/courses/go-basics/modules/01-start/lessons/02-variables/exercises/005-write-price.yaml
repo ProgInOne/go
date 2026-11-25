@@ -1,0 +1,54 @@
+id: go-basics.start.variables.write-price
+type: implement_function
+difficulty: 2
+concepts:
+  - { id: go.vars.short-declaration, weight: 1 }
+tags: [short-declaration, assignment, write-program]
+estimatedSeconds: 240
+prompt: |
+  다음 순서대로 프로그램을 완성하세요.
+
+  1. `:=`로 변수 `price`를 만들고 `1000`을 넣어요.
+  1. `=`로 `price`를 지금 값에 `300`을 더한 값으로 바꿔요.
+  1. `fmt.Println("가격:", price)`로 출력해요.
+
+  출력은 `가격: 1300`이어야 해요.
+spec:
+  starter: |
+    package main
+
+    import "fmt"
+
+    func main() {
+    	// 여기에 price를 만들고 값을 바꾸세요.
+    	fmt.Println("가격:")
+    }
+  solution: |
+    package main
+
+    import "fmt"
+
+    func main() {
+    	price := 1000
+    	price = price + 300
+    	fmt.Println("가격:", price)
+    }
+  checks:
+    - id: output
+      kind: stdout
+      text: "가격: 1300"
+      description: '`가격: 1300`이 출력됨'
+misconceptions: [go.mc.short-decl-reassigns]
+hints:
+  - 처음 만들 때와 값을 바꿀 때 쓰는 기호가 달라요.
+  - '값을 바꾸는 줄에서는 `=` 오른쪽에 `price`의 지금 값과 `300`을 더하는 식을 써요.'
+  - '`price = price + 300`처럼 쓰고, 시작 코드의 `fmt.Println("가격:")`에는 쉼표를 찍고 `price`를 더해 넘겨 보세요.'
+explanation: |
+  `price := 1000`으로 새 변수를 만들고, `price = price + 300`으로 값을 바꾼 뒤 `fmt.Println("가격:", price)`로 출력해요.
+
+  둘째 줄에 `:=`를 쓰면 `no new variables on left side of :=` 컴파일 오류가 나요. `price + 300`만 쓰고 `price`에 다시 넣지 않으면 계산한 값을 버리게 되어 `price + 300 (value of type int) is not used` 컴파일 오류가 나요.
+origin: authored
+review:
+  status: approved
+  draftedBy: ai:claude
+  reviewedBy: ai:reviewer

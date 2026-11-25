@@ -149,6 +149,6 @@ CI는 `pnpm content:check`와 `.go-version`의 Go로 `pnpm content:check:run`을
 
 ## 예시 과정
 
-`content/courses/go-basics`는 뼈대를 확인하기 위한 예시 과정입니다. 레슨 2개와 선택형 문제 8개가 있고, 문제는 독립 AI 검토자가 승인했습니다(검토 기록: [처음 6개](/docs/reviews/2026-11-23-go-basics-start-review.md), [난이도 3 문제 2개](/docs/reviews/2026-11-24-go-basics-level3-review.md)). 그래서 `pnpm content:build`에 문제 8개가 모두 들어갑니다.
+`content/courses/go-basics`는 뼈대를 확인하기 위한 예시 과정입니다. 레슨 2개에 실행 예제 3개, 문제 12개(선택형 8개, 출력 예측 2개, 코드 작성 2개)가 있고, 문제는 독립 AI 검토자가 승인했습니다(검토 기록: [처음 6개](/docs/reviews/2026-11-23-go-basics-start-review.md), [난이도 3 문제 2개](/docs/reviews/2026-11-24-go-basics-level3-review.md), [실행 예제와 코드 문제 4개](/docs/reviews/2026-11-25-go-basics-code-review.md)). 그래서 `pnpm content:build`에 문제 12개가 모두 들어갑니다.
 
 연습 세트는 난이도 구간(준비 1~2, 중심 2~3, 도전 3~4)에서 문제를 고르므로, 레슨마다 난이도 3 이상 연습 문제를 하나 이상 둡니다. `importance: core` 레슨은 난이도 3 이상 문제를 처음 시도에 하나 이상 맞혀야 통과하므로 반드시 필요합니다.

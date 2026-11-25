@@ -8,11 +8,15 @@ course go-basics
 exercise go-basics.start.first-program.check-println-two-values
 exercise go-basics.start.first-program.mcq-trace-two-functions
 exercise go-basics.start.first-program.mcq-where-execution-starts
+exercise go-basics.start.first-program.predict-call-order
 exercise go-basics.start.first-program.tf-println-needs-import
+exercise go-basics.start.first-program.write-two-lines
 exercise go-basics.start.variables.check-reassign-operator
 exercise go-basics.start.variables.mcq-change-value
 exercise go-basics.start.variables.mcq-trace-copy
 exercise go-basics.start.variables.multi-compile-errors
+exercise go-basics.start.variables.predict-redeclare
+exercise go-basics.start.variables.write-price
 lesson go-basics.start.first-program
 lesson go-basics.start.variables
 misconception go.mc.println-without-import
