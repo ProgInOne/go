@@ -1,6 +1,6 @@
 # apps/web
 
-ProgInOne Go의 웹 앱(React SPA)입니다. JavaScript 앱의 `apps/web`을 복사한 뒤 코드 실행 화면을 걷어 냈습니다([G-001](/docs/decisions.md#g-001-go-앱의-형태와-저장소-운영--확정)).
+ProgInOne Go의 웹 앱(React SPA)입니다. JavaScript 앱의 `apps/web`을 복사한 뒤 코드 실행 화면을 걷어 냈고([G-001](/docs/decisions.md#g-001-go-앱의-형태와-저장소-운영--확정)), Go 실행 화면을 새로 붙이고 있습니다([G-002](/docs/decisions.md#g-002-go-코드-실행과-채점--확정)).
 
 ## 실행
 
@@ -21,13 +21,20 @@ ProgInOne Go의 웹 앱(React SPA)입니다. JavaScript 앱의 `apps/web`을 복
 
 ## 문제 유형
 
-지금은 공통 선택형 3종(`mcq_single`, `mcq_multi`, `true_false`)만 있습니다. 렌더러, 답안 모델, 확신도·힌트·피드백 위젯은 공통 패키지 `@proginone/exercise-ui`에서 받고, `src/features/practice/exercise.tsx`가 이 앱의 이름으로 묶습니다. Go 코드를 쓰는 유형, 에디터, 실행 결과 화면은 Go 전용 설계 단계에서 추가합니다.
+지금은 공통 선택형 3종(`mcq_single`, `mcq_multi`, `true_false`)만 있습니다. 렌더러, 답안 모델, 확신도·힌트·피드백 위젯은 공통 패키지 `@proginone/exercise-ui`에서 받고, `src/features/practice/exercise.tsx`가 이 앱의 이름으로 묶습니다. Go 코드를 쓰는 유형은 G-002의 다음 단계에서 추가합니다.
+
+## Go 실행
+
+- `src/features/go/`: `/go` API(`api.ts`), 실행 결과 표시(`RunOutput.tsx`), 실행이 멈춘 이유와 가상 시간 안내(`messages.ts`), Go 에디터 언어(`language.ts`: `@codemirror/lang-go`, 탭 들여쓰기, 서버 `gofmt`)
+- 레슨의 실행 예제 `src/features/lesson-reader/RunnableExampleBlock.tsx`: 예측 후 실행, 코드 수정과 "gofmt로 정리", 컴파일 오류 줄 표시. 고친 코드는 아직 저장하지 않습니다
+- 에디터(`GoEditor.tsx`)는 처음 "코드 수정"을 누를 때 불러와 첫 화면 번들에 들어가지 않습니다
+- 설정 > Go 실행 환경(`src/routes/settings/go.tsx`): 찾은 Go, 설치 안내, 다시 찾기
 
 ## 걷어 낸 것
 
 JavaScript 앱에서 다음을 뺐습니다. 서버에도 해당 API가 없습니다.
 
-- 러너(샌드박스 iframe), 코드 실행·콘솔·미리보기, 실행 예제(`RunnableExample`)와 예측 후 실행
+- 러너(샌드박스 iframe), 브라우저 코드 실행·콘솔·미리보기. Go 실행 예제는 서버에서 실행하는 새 구현입니다
 - 직접 써 보기(`TryIt`), 프로젝트 화면, 코드 초안 저장
 - JS 문제 유형 렌더러(`@proginone/exercise-kit-ui`), 코드 에디터와 문제·작업 패널 나누기
 - 설정의 "자동 완성"과 "예측 후 실행", 단축키 도움말의 실행·포맷 항목

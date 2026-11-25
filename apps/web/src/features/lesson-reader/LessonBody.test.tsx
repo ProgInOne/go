@@ -75,7 +75,7 @@ describe('LessonBody', () => {
     expect(screen.getByText('문장', { selector: 'span' })).toHaveAttribute('title', '실행 단위');
   });
 
-  it('shows fenced code and renders nothing for components that need code execution', () => {
+  it('shows fenced code and renders nothing for examples in other languages', () => {
     renderBody([
       { type: 'code', lang: 'go', value: 'fmt.Println(1)' },
       component('RunnableExample', { id: 'hello', lang: 'js', code: 'console.log(1);' }),

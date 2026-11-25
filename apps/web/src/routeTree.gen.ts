@@ -23,6 +23,7 @@ import { Route as SettingsIndexRouteImport } from './routes/settings/index'
 import { Route as SettingsAiRouteImport } from './routes/settings/ai'
 import { Route as SettingsAppearanceRouteImport } from './routes/settings/appearance'
 import { Route as SettingsDataRouteImport } from './routes/settings/data'
+import { Route as SettingsGoRouteImport } from './routes/settings/go'
 import { Route as SettingsGoalsRouteImport } from './routes/settings/goals'
 import { Route as SettingsLearningRouteImport } from './routes/settings/learning'
 import { Route as ReviewMistakesIndexRouteImport } from './routes/review/mistakes/index'
@@ -99,6 +100,11 @@ const SettingsDataRoute = SettingsDataRouteImport.update({
   path: '/data',
   getParentRoute: () => SettingsRouteRoute,
 } as any)
+const SettingsGoRoute = SettingsGoRouteImport.update({
+  id: '/go',
+  path: '/go',
+  getParentRoute: () => SettingsRouteRoute,
+} as any)
 const SettingsGoalsRoute = SettingsGoalsRouteImport.update({
   id: '/goals',
   path: '/goals',
@@ -138,6 +144,7 @@ export interface FileRoutesByFullPath {
   '/settings/ai': typeof SettingsAiRoute
   '/settings/appearance': typeof SettingsAppearanceRoute
   '/settings/data': typeof SettingsDataRoute
+  '/settings/go': typeof SettingsGoRoute
   '/settings/goals': typeof SettingsGoalsRoute
   '/settings/learning': typeof SettingsLearningRoute
   '/courses/': typeof CoursesIndexRoute
@@ -158,6 +165,7 @@ export interface FileRoutesByTo {
   '/settings/ai': typeof SettingsAiRoute
   '/settings/appearance': typeof SettingsAppearanceRoute
   '/settings/data': typeof SettingsDataRoute
+  '/settings/go': typeof SettingsGoRoute
   '/settings/goals': typeof SettingsGoalsRoute
   '/settings/learning': typeof SettingsLearningRoute
   '/courses': typeof CoursesIndexRoute
@@ -180,6 +188,7 @@ export interface FileRoutesById {
   '/settings/ai': typeof SettingsAiRoute
   '/settings/appearance': typeof SettingsAppearanceRoute
   '/settings/data': typeof SettingsDataRoute
+  '/settings/go': typeof SettingsGoRoute
   '/settings/goals': typeof SettingsGoalsRoute
   '/settings/learning': typeof SettingsLearningRoute
   '/courses/': typeof CoursesIndexRoute
@@ -203,6 +212,7 @@ export interface FileRouteTypes {
     | '/settings/ai'
     | '/settings/appearance'
     | '/settings/data'
+    | '/settings/go'
     | '/settings/goals'
     | '/settings/learning'
     | '/courses/'
@@ -223,6 +233,7 @@ export interface FileRouteTypes {
     | '/settings/ai'
     | '/settings/appearance'
     | '/settings/data'
+    | '/settings/go'
     | '/settings/goals'
     | '/settings/learning'
     | '/courses'
@@ -244,6 +255,7 @@ export interface FileRouteTypes {
     | '/settings/ai'
     | '/settings/appearance'
     | '/settings/data'
+    | '/settings/go'
     | '/settings/goals'
     | '/settings/learning'
     | '/courses/'
@@ -370,6 +382,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SettingsDataRouteImport
       parentRoute: typeof SettingsRouteRoute
     }
+    '/settings/go': {
+      id: '/settings/go'
+      path: '/go'
+      fullPath: '/settings/go'
+      preLoaderRoute: typeof SettingsGoRouteImport
+      parentRoute: typeof SettingsRouteRoute
+    }
     '/settings/goals': {
       id: '/settings/goals'
       path: '/goals'
@@ -412,6 +431,7 @@ interface SettingsRouteRouteChildren {
   SettingsAiRoute: typeof SettingsAiRoute
   SettingsAppearanceRoute: typeof SettingsAppearanceRoute
   SettingsDataRoute: typeof SettingsDataRoute
+  SettingsGoRoute: typeof SettingsGoRoute
   SettingsGoalsRoute: typeof SettingsGoalsRoute
   SettingsLearningRoute: typeof SettingsLearningRoute
   SettingsIndexRoute: typeof SettingsIndexRoute
@@ -421,6 +441,7 @@ const SettingsRouteRouteChildren: SettingsRouteRouteChildren = {
   SettingsAiRoute: SettingsAiRoute,
   SettingsAppearanceRoute: SettingsAppearanceRoute,
   SettingsDataRoute: SettingsDataRoute,
+  SettingsGoRoute: SettingsGoRoute,
   SettingsGoalsRoute: SettingsGoalsRoute,
   SettingsLearningRoute: SettingsLearningRoute,
   SettingsIndexRoute: SettingsIndexRoute,

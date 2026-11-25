@@ -24,6 +24,7 @@ describe('compileLessonMdx', () => {
       concepts: ['go.basics.package-main'],
       misconceptions: ['go.mc.println-returns'],
       diagrams: [],
+      examples: [],
     });
     const json = JSON.stringify(r.tree);
     expect(json).not.toContain('position');
@@ -41,11 +42,17 @@ describe('compileLessonMdx', () => {
     ['bad enum', '<Callout kind="loud">a</Callout>', 'note | tip'],
     ['missing alt', '<Figure src="a.png" />', 'alt 속성이 필요'],
     ['interpolated code', '<Diagram alt="x">\n{`${evil}`}\n</Diagram>', '코드 블록 하나'],
-    // Components that need code execution or are JavaScript-only (G-001).
+    // JavaScript examples, and components that need graded code or are JavaScript-only.
     [
-      'a runnable example',
+      'a JavaScript example',
       '<RunnableExample id="x" lang="js">\n{`1`}\n</RunnableExample>',
-      '허용되지 않은 컴포넌트',
+      'go 중 하나',
+    ],
+    ['an example without code', '<RunnableExample id="x" lang="go" />', '코드 블록 하나'],
+    [
+      'an example id with capitals',
+      '<RunnableExample id="Hello" lang="go">\n\n```go\nx\n```\n\n</RunnableExample>',
+      '소문자, 숫자, 하이픈',
     ],
     ['a TryIt', '<TryIt ref="a.b.c.d" />', '허용되지 않은 컴포넌트'],
     ['an MDN link', '<MdnLink path="Web/JavaScript" />', '허용되지 않은 컴포넌트'],
@@ -53,6 +60,26 @@ describe('compileLessonMdx', () => {
   ])('rejects %s', (_, snippet, message) => {
     const r = compileLessonMdx(sections({ intro: snippet }));
     expect(r.errors.join('\n')).toContain(message);
+  });
+
+  it('keeps Go examples with their props for the web app and the run check', () => {
+    const example = (id: string, extra = '') =>
+      `<RunnableExample id="${id}" lang="go" predict editable${extra}>\n\n\`\`\`go\npackage main\n\nfunc main() {}\n\`\`\`\n\n</RunnableExample>`;
+    const r = compileLessonMdx(
+      sections({ examples: `${example('hello')}\n\n${example('broken', ' expectError')}` }),
+    );
+    expect(r.errors).toEqual([]);
+    expect(r.refs.examples.map(({ id, code, expectError }) => ({ id, code, expectError }))).toEqual(
+      [
+        { id: 'hello', code: 'package main\n\nfunc main() {}', expectError: false },
+        { id: 'broken', code: 'package main\n\nfunc main() {}', expectError: true },
+      ],
+    );
+    expect(JSON.stringify(r.tree)).toContain(
+      '"name":"RunnableExample","props":{"id":"hello","lang":"go","predict":true,"editable":true,"code":"package main\\n\\nfunc main() {}"}',
+    );
+    const twice = compileLessonMdx(sections({ examples: `${example('a')}\n\n${example('a')}` }));
+    expect(twice.errors.join('\n')).toContain('겹칩니다: a');
   });
 
   it('keeps a Diagram source and its line for the Mermaid check', () => {

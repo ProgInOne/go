@@ -11,6 +11,7 @@
     "typecheck": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p tsconfig.node.json"
   },
   "dependencies": {
+    "@codemirror/lang-go": "^6.0.1",
     "@proginone/exercise-kit": "workspace:*",
     "@proginone/exercise-ui": "^0.2.0",
     "@proginone/shared": "^0.2.0",

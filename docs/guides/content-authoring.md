@@ -6,17 +6,49 @@ Go 과정의 콘텐츠를 쓰고 검사하고 `content.db`로 빌드하는 방�
 
 ## 지금 쓸 수 있는 것
 
-이 저장소는 아직 Go 코드를 실행하지 않습니다([G-001](/docs/decisions.md#g-001-go-앱의-형태와-저장소-운영--확정)). 그래서 실행 없이 다룰 수 있는 콘텐츠만 씁니다.
+레슨의 실행 예제는 학습자의 Go로 로컬 서버에서 실행합니다([G-002](/docs/decisions.md#g-002-go-코드-실행과-채점--확정)). 코드를 채점하는 문제 유형은 아직 없어서, 문제는 선택형만 씁니다.
 
 | 항목 | 지금 | 이유 |
 |---|---|---|
-| 레슨 본문 | MDX. 코드는 ` ```go ` 펜스 코드 블록으로 보여 줌 | 실행하지 않고 읽기만 함 |
+| 레슨 본문 | MDX. 읽기만 하는 코드는 ` ```go ` 펜스 코드 블록, 실행하는 코드는 `<RunnableExample>` | |
 | 문제 유형 | `mcq_single`, `mcq_multi`, `true_false` | 공통 선택형만 등록됨(`packages/exercise-kit`) |
-| `usage` | `practice`, `check`(본문의 이해도 확인), `assessment`, `worked_example` | `try`와 `project`는 코드 실행이 필요함 |
-| 단원 종류 | `lesson`, `assessment` | `project`는 코드 실행이 필요함 |
+| `usage` | `practice`, `check`(본문의 이해도 확인), `assessment`, `worked_example` | `try`와 `project`는 코드 채점이 필요함 |
+| 단원 종류 | `lesson`, `assessment` | `project`는 코드 채점이 필요함 |
 | 문제 템플릿(`templates/`) | 쓸 수 없음 | Go 템플릿 형식은 Go 전용 설계에서 정함 |
 
-MDX 컴포넌트는 `Section`, `InlineExercise`, `Callout`, `CompareTable`/`Row`, `ConceptLink`, `Pitfall`/`Wrong`/`Actual`/`Right`, `Diagram`, `Figure`, `Reveal`, `Key`만 씁니다. JavaScript 저장소의 `RunnableExample`, `TryIt`, `ValueTrace`, `MdnLink`는 실행이 필요하거나 JavaScript 전용이라 없습니다. 실행 예제와 "직접 써 보기"는 Go 코드 실행 방식과 함께 정합니다.
+MDX 컴포넌트는 `Section`, `RunnableExample`, `InlineExercise`, `Callout`, `CompareTable`/`Row`, `ConceptLink`, `Pitfall`/`Wrong`/`Actual`/`Right`, `Diagram`, `Figure`, `Reveal`, `Key`만 씁니다. JavaScript 저장소의 `TryIt`은 코드 채점이 필요하고, `ValueTrace`와 `MdnLink`는 JavaScript 전용이라 없습니다.
+
+### 실행 예제
+
+`<RunnableExample>`은 학습자가 "실행"을 눌러 로컬 서버에서 돌려 보는 Go 프로그램입니다.
+
+````mdx
+<RunnableExample id="sum" lang="go" predict>
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("합계:", 3+4)
+}
+```
+
+</RunnableExample>
+````
+
+| 속성 | 설명 |
+|---|---|
+| `id` | 레슨 안에서 겹치지 않는 이름. 소문자, 숫자, 하이픈 |
+| `lang` | `go`만 씀 |
+| `predict` | 처음 실행하기 전에 출력을 예측해 적게 함 |
+| `editable` | 학습자가 코드를 고쳐 다시 실행할 수 있음. 기본값은 켬이고, 끄려면 `editable={false}` |
+| `expectError` | 컴파일 오류를 보여 주려는 예제. 실행 결과에 그 뜻을 알림 |
+
+- 코드는 `package main`과 `func main()`이 있는 완전한 프로그램이어야 합니다. 표준 라이브러리만 쓸 수 있고, 파일·네트워크·프로세스 실행은 동작하지 않습니다.
+- `time.Sleep`은 실제로 기다리지 않고 가상 시계를 앞으로 보냅니다. `time.Now()`는 2009-11-10 23:00:00 UTC에서 시작합니다.
+- 실행 결과를 빌드 때 확인하는 검사(`content:check --run`)는 다음 단계에서 더합니다. 그때까지는 저자가 직접 실행해 확인합니다.
 
 섹션 종류는 JavaScript 저장소와 같습니다. 다만 `walkthrough` 섹션은 실행 결과가 아니라 예제를 한 줄씩 따라가는 해설로 씁니다. 화면 제목은 "단계별 해설"이고, 레슨 화면에서는 `examples`와 함께 "예제 따라가기" 단계로 묶입니다.
 

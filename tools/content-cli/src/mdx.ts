@@ -10,8 +10,8 @@ import { lintDiagramSource } from './diagram.ts';
 // Lesson MDX → validated, serializable tree (docs/design/content-and-exercises.md#mdx-컴포넌트).
 // Content never runs code: imports, exports and expressions are rejected; only the listed
 // components with literal props are allowed. The web app renders the tree with React.
-// Code in a lesson is a fenced Markdown block (```go). Runnable examples and "직접 써 보기" need
-// Go execution, which comes with the Go-specific design (G-001).
+// Code in a lesson is a fenced Markdown block (```go), or a `<RunnableExample>` the learner can
+// run on the local server (G-002). "직접 써 보기" (`<TryIt>`) comes with graded code exercises.
 
 export const SECTION_KINDS = [
   'objectives',
@@ -32,15 +32,30 @@ export type SectionKind = (typeof SECTION_KINDS)[number];
 type PropType = 'string' | 'boolean' | 'string[]' | readonly string[];
 interface ComponentSpec {
   props: Record<string, { type: PropType; required?: boolean }>;
-  /** Children are taken as source code (Diagram). */
+  /** Children are taken as source code (RunnableExample, Diagram). */
   codeChild?: boolean;
 }
 
 const s = { type: 'string' } as const;
+const EXAMPLE_ID = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const req = <T extends { type: PropType }>(p: T) => ({ ...p, required: true });
 
 export const COMPONENTS: Record<string, ComponentSpec> = {
   Section: { props: { kind: req({ type: SECTION_KINDS }), title: s } },
+  /**
+   * A Go program the learner runs on the local server (G-002). `predict` asks for a guess first,
+   * `editable` lets the learner change it, `expectError` marks code meant to fail to compile.
+   */
+  RunnableExample: {
+    codeChild: true,
+    props: {
+      id: req(s),
+      lang: req({ type: ['go'] }),
+      predict: { type: 'boolean' },
+      editable: { type: 'boolean' },
+      expectError: { type: 'boolean' },
+    },
+  },
   InlineExercise: { props: { ref: req(s) } },
   Callout: {
     props: { kind: req({ type: ['note', 'tip', 'warning', 'danger', 'deep-dive'] }), title: s },
@@ -76,6 +91,8 @@ export interface CompiledLesson {
     misconceptions: string[];
     /** Mermaid sources of `<Diagram>`s; check parses them (diagram.ts). */
     diagrams: { line: number | null; code: string }[];
+    /** `<RunnableExample>`s, in order; `content:check --run` will run them (G-002). */
+    examples: { id: string; line: number | null; code: string; expectError: boolean }[];
   };
   errors: string[];
 }
@@ -156,6 +173,7 @@ export function compileLessonMdx(
     concepts: [],
     misconceptions: [],
     diagrams: [],
+    examples: [],
   };
   const sections: CompiledLesson['sections'] = [];
 
@@ -267,6 +285,24 @@ export function compileLessonMdx(
     if (name === 'ConceptLink' && typeof props['to'] === 'string') refs.concepts.push(props['to']);
     if (name === 'Pitfall' && typeof props['misconception'] === 'string')
       refs.misconceptions.push(props['misconception']);
+    if (name === 'RunnableExample' && typeof props['id'] === 'string') {
+      const id = props['id'];
+      if (!EXAMPLE_ID.test(id)) {
+        errors.push(
+          `${where(el)}<RunnableExample id>: 소문자, 숫자, 하이픈만 쓸 수 있습니다: ${id}`,
+        );
+      } else if (refs.examples.some((x) => x.id === id)) {
+        errors.push(`${where(el)}<RunnableExample id>가 레슨 안에서 겹칩니다: ${id}`);
+      }
+      if (typeof props['code'] === 'string') {
+        refs.examples.push({
+          id,
+          line: el.position?.start.line ?? null,
+          code: props['code'],
+          expectError: props['expectError'] === true,
+        });
+      }
+    }
     if (name === 'Diagram' && typeof props['code'] === 'string') {
       for (const e of lintDiagramSource(props['code'])) errors.push(`${where(el)}<Diagram>: ${e}`);
       refs.diagrams.push({ line: el.position?.start.line ?? null, code: props['code'] });

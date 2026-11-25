@@ -12,9 +12,11 @@ import {
   Telescope,
 } from 'lucide-react';
 import { createContext, useContext, type ReactNode } from 'react';
+import { useSettings } from '../../api/queries.ts';
 import { MasteryIcon, STAGE_NAMES } from '../mastery/MasteryIcon.tsx';
 import { InlineExerciseSlot } from './InlineExerciseSlot.tsx';
 import { LessonDiagram } from './LessonDiagram.tsx';
+import { RunnableExampleBlock } from './RunnableExampleBlock.tsx';
 import { SECTION_LABELS } from './sections.ts';
 import type { LessonStep } from './steps.ts';
 
@@ -188,6 +190,9 @@ function Component({ node }: { node: Node }) {
           <Children of={node} />
         </kbd>
       );
+    case 'RunnableExample':
+      // Only Go examples exist here; content-cli rejects other languages.
+      return str(p['lang']) === 'go' ? <RunnableExample p={p} /> : null;
     case 'InlineExercise':
       return <InlineExerciseSlot exerciseId={str(p['ref']) ?? ''} />;
     case 'Diagram':
@@ -324,6 +329,21 @@ function PracticeSection() {
             : '연습 시작'}
       </Link>
     </div>
+  );
+}
+
+function RunnableExample({ p }: { p: Record<string, unknown> }) {
+  const settings = useSettings();
+  return (
+    <RunnableExampleBlock
+      id={str(p['id']) ?? ''}
+      code={str(p['code']) ?? ''}
+      predict={p['predict'] === true}
+      allowSkip={settings.data?.['lesson.predictFirst'] !== 'required'}
+      // `editable` defaults to true, as in the JavaScript app.
+      editable={p['editable'] !== false}
+      expectError={p['expectError'] === true}
+    />
   );
 }
 
