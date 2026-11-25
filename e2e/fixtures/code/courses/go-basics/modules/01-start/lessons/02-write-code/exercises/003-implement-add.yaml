@@ -1,0 +1,32 @@
+id: go-basics.start.write-code.implement-add
+type: implement_function
+prompt: 두 정수의 합을 돌려주는 Add 함수를 완성하세요.
+difficulty: 2
+concepts:
+  - { id: go.code.write, weight: 1 }
+estimatedSeconds: 90
+hints:
+  - 한 줄씩 따라가 보세요.
+  - 값이 무엇인지 적어 보세요.
+  - 정답에 가까워요.
+review:
+  status: draft
+  draftedBy: ai:claude
+explanation: a + b를 돌려주면 돼요.
+spec:
+  entry: Add
+  starter: |
+    package main
+
+    func Add(a, b int) int {
+    	return 0
+    }
+  solution: |
+    package main
+
+    func Add(a, b int) int {
+    	return a + b
+    }
+  checks:
+    - { id: small, kind: call, args: ['3', '4'], want: ['7'] }
+    - { id: big, kind: call, args: ['1000', '2000'], want: ['3000'], hidden: true }

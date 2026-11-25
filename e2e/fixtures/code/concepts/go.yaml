@@ -1,0 +1,36 @@
+- id: go.basics.statement
+  title: 문장과 실행 순서
+  importance: standard
+  summary: main 함수 안의 문장은 위에서 아래로 한 문장씩 실행됩니다.
+- id: go.basics.println
+  title: fmt.Println으로 출력하기
+  importance: core
+  summary: 값을 화면에 보여 주는 가장 기본적인 방법입니다.
+  prerequisites: [go.basics.statement]
+  misconceptions: [go.mc.println-is-return]
+  doc: https://pkg.go.dev/fmt#Println
+- id: go.vars.var
+  title: var 선언
+  importance: core
+  summary: 나중에 다른 값을 넣을 수 있는 변수를 선언합니다.
+  prerequisites: [go.basics.statement]
+  doc: https://go.dev/ref/spec#Variable_declarations
+- id: go.vars.const
+  title: const 선언
+  importance: core
+  summary: 값을 바꿀 수 없는 상수를 선언합니다.
+  prerequisites: [go.vars.var]
+  misconceptions: [go.mc.const-reassign]
+  doc: https://go.dev/ref/spec#Constant_declarations
+- id: go.vars.reassign
+  title: 재할당
+  importance: standard
+  summary: 이미 있는 변수에 = 로 새 값을 넣습니다.
+  prerequisites: [go.vars.var]
+# Overlay for the Go code server (e2e/tests/code-exercises.spec.ts).
+- id: go.code.write
+  title: 코드 작성
+  importance: standard
+  summary: 함수와 프로그램을 직접 써서 실행해 봅니다.
+  prerequisites: [go.basics.println]
+  doc: https://go.dev/doc/tutorial/getting-started

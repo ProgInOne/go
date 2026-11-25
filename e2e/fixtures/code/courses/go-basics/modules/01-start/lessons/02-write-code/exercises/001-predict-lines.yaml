@@ -1,0 +1,26 @@
+id: go-basics.start.write-code.predict-lines
+type: predict_output
+prompt: 이 프로그램은 무엇을 출력하나요?
+difficulty: 2
+concepts:
+  - { id: go.code.write, weight: 1 }
+estimatedSeconds: 90
+hints:
+  - 한 줄씩 따라가 보세요.
+  - 값이 무엇인지 적어 보세요.
+  - 정답에 가까워요.
+review:
+  status: draft
+  draftedBy: ai:claude
+explanation: 값 사이에 공백이 들어가요.
+spec:
+  code: |
+    package main
+
+    import "fmt"
+
+    func main() {
+    	fmt.Println("합계:", 3+4)
+    	fmt.Println("끝")
+    }
+  answerKind: output

@@ -1,0 +1,19 @@
+{
+  "v": 1,
+  "entries": {
+    "go-basics.start.write-code.predict-lines": {
+      "inputHash": "4519abc715fca75796f6978003d17fc3182fb82547d11cf831cf608b4c41968a",
+      "expected": {
+        "kind": "output",
+        "lines": ["합계: 7", "끝"]
+      }
+    },
+    "go-basics.start.write-code.predict-unused": {
+      "inputHash": "ed752b088b63febc6d2241dfc6a546bd784c920cba5b085e208915f000491de6",
+      "expected": {
+        "kind": "choice",
+        "choiceId": "c"
+      }
+    }
+  }
+}
