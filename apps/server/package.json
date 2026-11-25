@@ -18,6 +18,7 @@
     "@proginone/ai": "^0.2.0",
     "@proginone/content-schema": "^0.2.0",
     "@proginone/exercise-kit": "workspace:*",
+    "@proginone/go-runner": "workspace:*",
     "@proginone/learning-engine": "^0.2.0",
     "@proginone/shared": "^0.2.0",
     "better-sqlite3": "^13.2.0",

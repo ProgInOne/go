@@ -1,9 +1,10 @@
 import { randomBytes } from 'node:crypto';
-import { existsSync, mkdirSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { serve } from '@hono/node-server';
 import { TaskRunner } from '@proginone/ai';
+import { goRunnerDataDir } from '@proginone/go-runner';
 import { createProvider } from './ai/provider.ts';
 import { TUTOR_PROFILE } from './ai/tutor-profile.ts';
 import { ConfigError, loadConfig } from './config/load.ts';
@@ -24,6 +25,7 @@ import { BackupScheduler } from './services/backup/scheduler.ts';
 import { BackupLocationService } from './services/backup/location.ts';
 import { BackupService } from './services/backup/service.ts';
 import { DataResetService } from './services/data/reset-service.ts';
+import { GoService } from './services/go/go-service.ts';
 import { AiService } from './services/ai/ai-service.ts';
 import { ModelSelection } from './services/ai/model-selection.ts';
 import { systemClock } from './services/clock.ts';
@@ -189,6 +191,21 @@ const tutor = new TutorService({ userDb, content, runner, ai, now: systemClock, 
 tutorRef = tutor;
 // Rolling summaries of idle tutor threads (docs/design/ai-system.md#sessionsummarize).
 memory.start();
+// The learner's Go (G-002): detect now, warm the build cache in the background.
+const go = new GoService({
+  dataDir: goRunnerDataDir(config.dataDir),
+  ...(config.goPath === undefined ? {} : { configuredPath: config.goPath }),
+  contentVersion: readGoVersionFile(new URL('../../../.go-version', import.meta.url)),
+  log,
+});
+await go.start();
+function readGoVersionFile(file: URL): string | null {
+  try {
+    return readFileSync(file, 'utf8').trim() || null;
+  } catch {
+    return null;
+  }
+}
 const token = randomBytes(32).toString('base64url');
 const webDistDir = fileURLToPath(new URL('../../web/dist', import.meta.url));
 const app = createApp({
@@ -214,6 +231,7 @@ const app = createApp({
     hintPolicy: () => settings.get()['hints.policy'],
   }),
   ai: { ai, tutor, memory, evaluator },
+  go,
   maintenance,
   version: APP_VERSION,
   ...(config.mode === 'production' ? { webDistDir } : {}),

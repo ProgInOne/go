@@ -5,6 +5,7 @@ import type { Logger } from '../observability/logger.ts';
 import type { BackupLocationService } from '../services/backup/location.ts';
 import type { BackupService } from '../services/backup/service.ts';
 import type { DataResetService } from '../services/data/reset-service.ts';
+import type { GoService } from '../services/go/go-service.ts';
 import type { ContentAccess } from '../services/curriculum/content-access.ts';
 import type { AiService } from '../services/ai/ai-service.ts';
 import type { PracticeServices } from '../services/practice/index.ts';
@@ -19,6 +20,7 @@ import { backupRoutes, dataRoutes } from './routes/backups.ts';
 import { clientErrorRoutes } from './routes/client-errors.ts';
 import { curriculumRoutes } from './routes/curriculum.ts';
 import { exerciseRoutes } from './routes/exercises.ts';
+import { goRoutes } from './routes/go.ts';
 import { learningRoutes } from './routes/learning.ts';
 import { attemptRoutes, practiceSetRoutes } from './routes/practice.ts';
 import { settingsRoutes } from './routes/settings.ts';
@@ -46,6 +48,8 @@ export interface AppDeps {
     evaluator?: EvaluatorService;
     keepAliveMs?: number;
   };
+  /** The learner's Go: toolchain status, runs and gofmt (G-002). Omitted in tests without Go. */
+  go?: GoService;
   /** Built web app to serve (production). Omitted in development, where Vite serves it. */
   webDistDir?: string;
   maintenance?: MaintenanceState;
@@ -68,6 +72,7 @@ export function createApp({
   content,
   practice,
   ai,
+  go,
   webDistDir,
   maintenance: state = new MaintenanceState(),
   version = '0.0.0',
@@ -109,6 +114,7 @@ export function createApp({
     .route('/attempts', attemptRoutes(practice.attempts))
     .route('/', learningRoutes(practice));
   if (dataReset) api.route('/data', dataRoutes(dataReset));
+  if (go) api.route('/go', goRoutes(go));
   if (ai) {
     const opts = ai.keepAliveMs ? { keepAliveMs: ai.keepAliveMs } : {};
     api

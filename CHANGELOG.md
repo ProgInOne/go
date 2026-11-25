@@ -7,6 +7,7 @@
 
 ### Added
 
+- 서버 Go 실행 API(G-002): 학습자 Go 찾기와 상태·다시 찾기(`/go/toolchain`), `main.go` 하나의 자유 실행(`/go/run`, 표준 입력, 실행마다 새 난수 시드), `gofmt`(`/go/format`). 시작할 때 Go를 찾고 빌드 캐시를 미리 채움. 설정 `goPath`(`PROGINONE_GO_PATH`). Go가 없으면 `EXERCISE_NOT_RUNNABLE`(`details.reason: go-unavailable`)
 - Go 실행기 `packages/go-runner`(G-002): 학습자의 Go(1.22 이상) 찾기, 깨끗한 환경의 `wasip1` 컴파일, Worker 스레드와 최소 WASI로 격리 실행(표준 입출력, 가상 시계, 시드 난수만), 시간·메모리·출력 한도, 동시 실행 제한, `gofmt`. CI에 Go 설치(`.go-version`)
 - 문서: Go 코드 실행과 채점 결정(G-002)과 [설계 문서](/docs/design/go-code-execution.md)
 - `go-basics` 레슨마다 난이도 3 선택형 문제 1개(두 함수의 실행 순서와 출력, 변수 값 따라가기)와 AI 교차 검토. 연습 세트의 도전 구간(난이도 3~4)이 비어 있던 것을 채움([검토 기록](/docs/reviews/2026-11-24-go-basics-level3-review.md))

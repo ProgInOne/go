@@ -21,12 +21,13 @@ pnpm start               # 프로덕션 모드: OS 표준 위치의 ProgInOne Go
 - 학습 엔진(`@proginone/learning-engine`): 숙련도, FSRS 복습, 오늘의 학습, 목표와 진도, 적응형 다음 문제
 - AI 튜터와 기억(`@proginone/ai`, Go 튜터 프로필 `src/ai/tutor-profile.ts`)
 - 설정, 백업·복원·초기화, `user.db` 마이그레이션, 로그, 단일 실행 잠금
+- Go 실행(`/go`, G-002): 학습자 Go 찾기와 상태(`GET /go/toolchain`, `POST /go/toolchain/refresh`), `main.go` 하나의 자유 실행(`POST /go/run`), `gofmt`(`POST /go/format`). 실행기는 `@proginone/go-runner`, 서비스는 `src/services/go/go-service.ts`
 
 문제 채점은 이 저장소의 `@proginone/exercise-kit`(공통 선택형 3종)으로 합니다.
 
 ## 아직 없는 것
 
-Go 코드 실행은 Go 전용 설계 단계에서 정합니다. 그때까지 다음은 없습니다.
+코드 문제의 채점은 G-002의 다음 단계에서 더합니다. 그때까지 다음은 없습니다.
 
 - 실행 계획(`/exercises/:id/run-plan`), 직접 써 보기(`/exercises/:id/try-attempts`), 프로젝트 화면, 예제 코드 초안
 - 러너 셸(`/sandbox/*`)과 그 하위 도메인 허용. 호스트는 `127.0.0.1`·`localhost`만 받습니다.
