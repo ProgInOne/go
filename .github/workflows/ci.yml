@@ -73,6 +73,10 @@ jobs:
       - name: Content check
         run: pnpm content:check
 
+      # Lesson examples compile, run and are gofmt-formatted with the pinned Go (G-002).
+      - name: Content run check
+        run: pnpm content:check:run
+
       - name: Build
         run: pnpm build
 

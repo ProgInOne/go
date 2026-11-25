@@ -356,6 +356,9 @@ importers:
       '@proginone/exercise-kit':
         specifier: workspace:*
         version: link:../../packages/exercise-kit
+      '@proginone/go-runner':
+        specifier: workspace:*
+        version: link:../../packages/go-runner
       better-sqlite3:
         specifier: ^13.2.0
         version: 13.2.0

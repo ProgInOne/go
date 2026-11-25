@@ -48,7 +48,7 @@ func main() {
 
 - 코드는 `package main`과 `func main()`이 있는 완전한 프로그램이어야 합니다. 표준 라이브러리만 쓸 수 있고, 파일·네트워크·프로세스 실행은 동작하지 않습니다.
 - `time.Sleep`은 실제로 기다리지 않고 가상 시계를 앞으로 보냅니다. `time.Now()`는 2009-11-10 23:00:00 UTC에서 시작합니다.
-- 실행 결과를 빌드 때 확인하는 검사(`content:check --run`)는 다음 단계에서 더합니다. 그때까지는 저자가 직접 실행해 확인합니다.
+- `pnpm content:check:run`이 모든 예제(검토 전 포함)를 실제 Go로 컴파일·실행합니다. 예제는 gofmt 형식이어야 하고, 오류 없이 끝나야 합니다. `expectError` 예제는 컴파일 오류가 나야 합니다. panic이나 0이 아닌 종료 코드로 끝나는 예제는 아직 쓸 수 없습니다.
 
 섹션 종류는 JavaScript 저장소와 같습니다. 다만 `walkthrough` 섹션은 실행 결과가 아니라 예제를 한 줄씩 따라가는 해설로 씁니다. 화면 제목은 "단계별 해설"이고, 레슨 화면에서는 `examples`와 함께 "예제 따라가기" 단계로 묶입니다.
 
@@ -77,11 +77,12 @@ content/
 
 ```shell
 pnpm content:check       # 스키마, 참조 무결성, 문제 스펙, 섹션 규칙 검사
+pnpm content:check:run   # 위 검사 + 레슨 실행 예제를 실제 Go로 실행하고 gofmt 형식 확인(Go 1.22 이상 필요)
 pnpm content:build       # 승인된 문제만 content/dist/content.db로 빌드하고 공개 slug 목록 갱신
 pnpm content:build:dev   # 개발용: 검토 전(draft) 문제도 포함
 ```
 
-CI는 `pnpm content:check`를 실행합니다. MDX와 `content/`는 Prettier 대상이 아닙니다.
+CI는 `pnpm content:check`와 `.go-version`의 Go로 `pnpm content:check:run`을 실행합니다. MDX와 `content/`는 Prettier 대상이 아닙니다.
 
 ## 예시 과정
 

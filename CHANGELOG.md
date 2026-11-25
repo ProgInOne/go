@@ -7,6 +7,7 @@
 
 ### Added
 
+- 콘텐츠 실행 검증 `pnpm content:check:run`(G-002): 레슨 `<RunnableExample>`을 실제 Go로 컴파일·실행하고 gofmt 형식인지 검사(오류 없이 끝나야 하고, `expectError`는 컴파일 오류가 나야 함). CI에서 `.go-version`의 Go로 실행
 - 레슨 실행 예제(G-002): MDX `<RunnableExample lang="go">`(`id`, `predict`, `editable`, `expectError`)를 content-cli가 검사하고, 웹이 서버에서 실행해 출력·컴파일 오류·멈춘 이유·가상 시간을 보여 줌. 예측 후 실행, 코드 수정(Go 에디터, 처음 쓸 때 불러옴), "gofmt로 정리", 컴파일 오류 줄 표시
 - 설정 > Go 실행 환경: 찾은 Go 버전과 위치, 콘텐츠 검증 버전과 다를 때 안내, 설치 안내, 다시 찾기
 - E2E에서 실제 Go로 실행 예제 확인, CI의 E2E 검사에 Go 설치

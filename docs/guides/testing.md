@@ -8,6 +8,7 @@ ProgInOne Go 저장소의 테스트 종류와 실행 방법입니다. 테스트 
 |---|---|---|---|
 | 단위·API·컴포넌트 | `apps/*/src`, `packages/*/src`, `tools/*` 의 `*.test.ts(x)` | `pnpm test` | `lint · typecheck · test · build` |
 | 콘텐츠 검사 | `content/` | `pnpm content:check` | `lint · typecheck · test · build` |
+| 콘텐츠 실행 검증 | `content/`의 `<RunnableExample>` | `pnpm content:check:run` | `lint · typecheck · test · build` |
 | 브라우저 E2E·접근성 | `e2e/tests/*.spec.ts` | `pnpm test:e2e` | `e2e · visual · a11y` |
 | 시각 회귀 | `e2e/tests/visual.spec.ts` 등의 `@visual` 테스트 | `pnpm test:e2e:visual` | `e2e · visual · a11y` |
 
