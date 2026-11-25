@@ -1,0 +1,13 @@
+{
+  "name": "@proginone/go-runner",
+  "version": "0.0.0",
+  "private": true,
+  "description": "학습자 Go 코드를 wasip1 Wasm으로 컴파일하고 최소 WASI로 격리해 실행하는 실행기(G-002)",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  }
+}

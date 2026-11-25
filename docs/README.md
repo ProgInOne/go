@@ -49,4 +49,4 @@ ProgInOne Go 저장소의 모든 문서 목록과 읽는 순서입니다.
 
 | 문서 | 작성 시점 |
 |---|---|
-| 패키지별 `README.md` | 각 패키지 생성 시 ([exercise-kit](/packages/exercise-kit/README.md), [server](/apps/server/README.md)) |
+| 패키지별 `README.md` | 각 패키지 생성 시 ([exercise-kit](/packages/exercise-kit/README.md), [go-runner](/packages/go-runner/README.md), [server](/apps/server/README.md)) |

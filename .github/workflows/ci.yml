@@ -49,6 +49,12 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      # go-runner tests compile and run real Go (G-002); content outputs are checked with this version.
+      - uses: actions/setup-go@v7
+        with:
+          go-version-file: .go-version
+          cache: false
+
       - name: Lint
         run: pnpm lint
 
