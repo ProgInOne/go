@@ -1,0 +1,12 @@
+id: go-basics.start.write-code
+title: 코드 써 보기
+summary: Go 코드를 직접 쓰고 실행 결과를 예측합니다.
+importance: standard
+estimatedMinutes: { read: 5, practice: 10 }
+concepts:
+  primary: [go.code.write]
+objectives:
+  - 프로그램의 출력을 예측할 수 있다.
+  - 간단한 함수와 프로그램을 쓸 수 있다.
+practice:
+  targetCount: 4

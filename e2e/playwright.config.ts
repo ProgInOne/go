@@ -40,6 +40,19 @@ const dataSettingsDir =
   process.env['E2E_DATA_SETTINGS_DIR'] ?? mkdtempSync(join(tmpdir(), 'proginone-e2e-data-'));
 process.env['E2E_DATA_SETTINGS_DIR'] = dataSettingsDir;
 process.env['E2E_DATA_SETTINGS_URL'] = `http://127.0.0.1:${DATA_PORT}`;
+// A fourth server for the Go code exercises (tests/code-exercises.spec.ts): its content adds a
+// lesson of predict_output and implement_function items (fixtures/code over the shared content),
+// so the shared lessons, sets and screenshots stay as they are. Grading runs the real Go.
+const CODE_PORT = PORT + 3;
+const codeDir =
+  process.env['E2E_CODE_DATA_DIR'] ?? mkdtempSync(join(tmpdir(), 'proginone-e2e-code-'));
+process.env['E2E_CODE_DATA_DIR'] = codeDir;
+process.env['E2E_CODE_URL'] = `http://127.0.0.1:${CODE_PORT}`;
+const codeContentDb = join(codeDir, 'content.db');
+if (process.env['E2E_CODE_CONTENT_DB'] !== codeContentDb) {
+  buildFixtureContent(codeContentDb, 'code');
+  process.env['E2E_CODE_CONTENT_DB'] = codeContentDb;
+}
 const serverEnv = (port: number, dir: string, content = contentDb) => ({
   NODE_ENV: 'production',
   PROGINONE_PORT: String(port),
@@ -120,6 +133,13 @@ export default defineConfig({
       reuseExistingServer: false,
       timeout: 30_000,
       env: serverEnv(DATA_PORT, dataSettingsDir),
+    },
+    {
+      command: 'node ../apps/server/src/main.ts',
+      url: `http://127.0.0.1:${CODE_PORT}/`,
+      reuseExistingServer: false,
+      timeout: 30_000,
+      env: serverEnv(CODE_PORT, codeDir, codeContentDb),
     },
   ],
 });

@@ -7,8 +7,9 @@ import { exerciseKit } from '../tools/content-cli/src/kit.ts';
 
 /**
  * Builds the fixture content pack the E2E server reads (PROGINONE_CONTENT_DB): two modules with
- * the three common choice types and a unit assessment (G-001: no Go code execution yet). Called
- * from the Playwright config because the web server starts before globalSetup would run.
+ * the three common choice types and a unit assessment. The Go code exercises are in the `code`
+ * overlay (their own server). Called from the Playwright config because the web server starts
+ * before globalSetup would run.
  *
  * `overlay` (a directory under `fixtures/`) is copied over the fixture content first, for a
  * server that needs more content than the shared one without changing what the other specs see.

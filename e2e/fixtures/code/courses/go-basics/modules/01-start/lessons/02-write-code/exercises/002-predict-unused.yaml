@@ -1,0 +1,27 @@
+id: go-basics.start.write-code.predict-unused
+type: predict_output
+prompt: 이 프로그램을 실행하면 어떻게 되나요?
+difficulty: 2
+concepts:
+  - { id: go.code.write, weight: 1 }
+estimatedSeconds: 90
+hints:
+  - 한 줄씩 따라가 보세요.
+  - 값이 무엇인지 적어 보세요.
+  - 정답에 가까워요.
+review:
+  status: draft
+  draftedBy: ai:claude
+explanation: 쓰지 않는 변수는 컴파일 오류예요.
+spec:
+  code: |
+    package main
+
+    func main() {
+    	x := 1
+    }
+  answerKind: choice
+  choices:
+    - { id: a, text: '`1`을 출력한다' }
+    - { id: b, text: 아무것도 출력하지 않는다 }
+    - { id: c, text: 컴파일 오류가 난다, outcome: compile-error }

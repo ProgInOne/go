@@ -1,0 +1,34 @@
+id: go-basics.start.write-code.program-greet
+type: implement_function
+prompt: 이름을 한 줄 읽어 "안녕, 이름"을 출력하는 프로그램을 쓰세요.
+difficulty: 2
+concepts:
+  - { id: go.code.write, weight: 1 }
+estimatedSeconds: 90
+hints:
+  - 한 줄씩 따라가 보세요.
+  - 값이 무엇인지 적어 보세요.
+  - 정답에 가까워요.
+review:
+  status: draft
+  draftedBy: ai:claude
+explanation: fmt.Scanln으로 읽고 fmt.Println으로 출력해요.
+spec:
+  starter: |
+    package main
+
+    func main() {
+    }
+  solution: |
+    package main
+
+    import "fmt"
+
+    func main() {
+    	var name string
+    	fmt.Scanln(&name)
+    	fmt.Println("안녕,", name)
+    }
+  checks:
+    - { id: gopher, kind: stdout, stdin: "고퍼\n", text: '안녕, 고퍼' }
+    - { id: hidden, kind: stdout, stdin: "Go\n", text: '안녕, Go', hidden: true }
