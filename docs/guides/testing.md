@@ -13,6 +13,14 @@ ProgInOne Go 저장소의 테스트 종류와 실행 방법입니다. 테스트 
 
 두 CI 검사는 모두 필수입니다([G-001](/docs/decisions.md#g-001-go-앱의-형태와-저장소-운영--확정)).
 
+## Go가 필요한 테스트
+
+`packages/go-runner`의 테스트는 실제 Go로 `wasip1` Wasm을 컴파일하고 실행합니다([G-002](/docs/decisions.md#g-002-go-코드-실행과-채점--확정)).
+
+- CI의 `lint · typecheck · test · build` 검사는 `actions/setup-go`로 `.go-version`의 Go를 설치합니다. CI에서 Go를 찾지 못하면 테스트가 실패합니다.
+- 로컬에서 Go를 찾지 못하면 이 테스트를 건너뜁니다.
+- 첫 테스트는 빈 빌드 캐시에 표준 라이브러리를 컴파일하므로 몇 초 더 걸립니다.
+
 ## E2E
 
 `pnpm test:e2e`는 프로덕션 빌드를 만든 뒤 Playwright(Chromium)로 실제 서버와 웹을 시험합니다.

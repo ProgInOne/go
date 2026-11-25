@@ -11,6 +11,7 @@ ProgInOne Go 앱(서버와 웹)을 내 컴퓨터에서 실행하는 방법입니
 |---|---|---|
 | Node.js | 24 LTS 이상(`.nvmrc`) | `node --version` |
 | pnpm | `package.json`의 `packageManager` 버전 | `pnpm --version` |
+| Go | 1.22 이상. 개발에는 `.go-version`의 버전을 권장(없으면 `go-runner` 테스트를 건너뜀) | `go version` |
 | Codex CLI | AI 튜터를 쓸 때만 | `codex --version` |
 
 `pnpm install`에는 공통 패키지(`@proginone/*`)를 받을 GitHub 토큰이 필요합니다. 설정 방법은 [README](/README.md#빠른-시작)에 있습니다.
