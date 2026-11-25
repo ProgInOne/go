@@ -83,7 +83,11 @@ describe('/go without Go', () => {
 describe.skipIf(!toolchain)('/go with Go', () => {
   const service = new GoService({ dataDir: tmpDir(), contentVersion: '1.27.3', log: silentLog });
   const app = appFor(service);
-  beforeAll(() => service.start(), 180_000);
+  // A cold build cache (CI) takes several seconds; tests start after the prewarm.
+  beforeAll(async () => {
+    await service.start();
+    await service.warmed;
+  }, 180_000);
 
   it('reports the toolchain', async () => {
     const body = (await (await app.request('/go/toolchain')).json()) as Record<string, unknown>;

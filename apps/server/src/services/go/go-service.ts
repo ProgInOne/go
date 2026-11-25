@@ -60,6 +60,8 @@ export class GoService {
   private lookup: ToolchainLookup = { status: 'missing', searched: [] };
   private runner: GoRunner | null = null;
   private pending: Promise<GoToolchainStatus> | null = null;
+  /** Settles when the background prewarm started by `start()` ends (tests wait on it). */
+  warmed: Promise<void> = Promise.resolve();
   private readonly options: GoServiceOptions;
 
   constructor(options: GoServiceOptions) {
@@ -103,7 +105,7 @@ export class GoService {
     const runner = this.runner;
     if (!runner) return;
     const started = performance.now();
-    runner.prewarm().then(
+    this.warmed = runner.prewarm().then(
       () => {
         this.options.log.info(
           { ms: Math.round(performance.now() - started) },
