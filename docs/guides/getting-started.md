@@ -50,6 +50,9 @@ pnpm build && pnpm start # 프로덕션 모드: http://127.0.0.1:4311 (브라우
 | `PROGINONE_OPEN_BROWSER` | 프로덕션 `true`, 개발 `false` | 시작 시 브라우저 열기 |
 | `PROGINONE_AI_PROVIDER` | `codex` | `codex` 또는 `mock`(테스트용) |
 | `PROGINONE_CODEX_PATH` | `codex` | Codex CLI 경로 |
+| `PROGINONE_GO_PATH` | 없음(`PATH`와 OS 표준 위치에서 찾음) | Go 실행 파일이나 그 폴더. `config.json`에서는 `goPath` |
+
+서버는 시작할 때 Go(1.22 이상)를 찾고, 찾으면 빌드 캐시를 미리 채웁니다(G-002). Go가 없어도 서버는 시작하고, 레슨 읽기와 선택형 문제는 그대로 됩니다. Go를 설치한 뒤에는 서버를 다시 시작하지 않아도 `POST /api/v1/go/toolchain/refresh`로 다시 찾습니다. 빌드 캐시와 임시 파일은 `<데이터 위치>/go-runner`에 있고 백업 대상이 아닙니다.
 
 ## 테스트
 

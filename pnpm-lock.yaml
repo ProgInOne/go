@@ -214,6 +214,9 @@ importers:
       '@proginone/exercise-kit':
         specifier: workspace:*
         version: link:../../packages/exercise-kit
+      '@proginone/go-runner':
+        specifier: workspace:*
+        version: link:../../packages/go-runner
       '@proginone/learning-engine':
         specifier: ^0.2.0
         version: 0.2.0
@@ -339,6 +342,8 @@ importers:
       '@proginone/exercise-core':
         specifier: ^0.2.0
         version: 0.2.0
+
+  packages/go-runner: {}
 
   tools/content-cli:
     dependencies:

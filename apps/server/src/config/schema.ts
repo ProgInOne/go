@@ -8,6 +8,8 @@ export const configSchema = z.object({
   /** Built content pack (`content-cli build`). */
   contentDbPath: z.string().min(1),
   codexPath: z.string().min(1),
+  /** The learner's `go` binary or its folder (G-002). Unset: search PATH and standard folders. */
+  goPath: z.string().min(1).optional(),
   logLevel: z.enum(['debug', 'info', 'warn', 'error']),
   openBrowser: z.boolean(),
   aiProvider: z.enum(['codex', 'mock']),
@@ -24,6 +26,7 @@ export const ENV_KEYS = {
   backupDir: 'PROGINONE_BACKUP_DIR',
   contentDbPath: 'PROGINONE_CONTENT_DB',
   codexPath: 'PROGINONE_CODEX_PATH',
+  goPath: 'PROGINONE_GO_PATH',
   logLevel: 'PROGINONE_LOG_LEVEL',
   openBrowser: 'PROGINONE_OPEN_BROWSER',
   aiProvider: 'PROGINONE_AI_PROVIDER',

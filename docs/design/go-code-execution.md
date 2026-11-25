@@ -65,7 +65,7 @@ Go는 브라우저가 직접 실행할 수 없으므로 실행 위치부터 다�
 ### Go 도구 체인 찾기와 버전
 
 - 서버는 시작할 때와 설정을 바꿀 때 `go`를 찾습니다.
-  순서는 설정의 경로, `PATH`, 각 OS의 표준 설치 위치(macOS `/usr/local/go/bin`, `/opt/homebrew/bin`, Windows `C:\Program Files\Go\bin`, Linux `/usr/local/go/bin`)입니다.
+  순서는 설정의 경로(`config.json`의 `goPath` 또는 `PROGINONE_GO_PATH`), `PATH`, 각 OS의 표준 설치 위치(macOS `/usr/local/go/bin`, `/opt/homebrew/bin`, Windows `C:\Program Files\Go\bin`, Linux `/usr/local/go/bin`)입니다.
 - `go version`과 `go env GOROOT`로 버전과 위치를 확인하고, `gofmt`는 `GOROOT/bin`에서 찾습니다.
 - **최소 버전은 Go 1.22**입니다.
   `wasip1` 대상은 1.21부터 있고, 1.22에서 `for` 반복 변수가 반복마다 새로 만들어지도록 바뀌어 같은 코드의 출력이 달라질 수 있기 때문입니다.
