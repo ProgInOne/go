@@ -2,11 +2,19 @@ import {
   ASSESSMENT_MAX_ITEMS,
   containsRawHtml,
   type ConceptSource,
+  type ExerciseSource,
 } from '@proginone/content-schema';
+import { join } from 'node:path';
 import { checkAliases, type AliasRow } from './aliases.ts';
 import { parseDiagrams } from './diagram.ts';
 import { Diagnostics } from './diagnostics.ts';
 import { loadContent, type ContentSource, type LessonNodeSource } from './load.ts';
+import {
+  EXPECTATIONS_FILE,
+  predictInputHash,
+  readExpectations,
+  type ExpectationStore,
+} from './expectations.ts';
 import { compileLessonMdx, type CompiledLesson } from './mdx.ts';
 import { namingWarning } from './naming.ts';
 
@@ -25,6 +33,13 @@ export type SpecValidator = (
 
 export interface CheckOptions {
   validateSpec?: SpecValidator;
+  /**
+   * Execution-derived predict_output answer keys. Default: read
+   * `<root>/.generated/predict-expected.json` (see expectations.ts).
+   */
+  expectations?: ExpectationStore;
+  /** `check --run` computes the keys itself: do not fill or report them here. */
+  skipExpectations?: boolean;
 }
 
 export interface CheckResult {
@@ -69,6 +84,8 @@ export function checkContent(root: string, options: CheckOptions = {}): CheckRes
   const diag = new Diagnostics(root);
   const source = loadContent(root, diag);
   const lessons = new Map<string, CompiledLesson>();
+  const expectations = options.expectations ?? readExpectations(root, diag);
+  const predictIds = new Set<string>();
   const diagrams: { file: string; line: number | null; code: string }[] = [];
 
   // ── Uniqueness ──
@@ -189,6 +206,11 @@ export function checkContent(root: string, options: CheckOptions = {}): CheckRes
         const naming = namingWarning(field, text);
         if (naming) diag.warn(exFile, naming);
       }
+      const predict = ex.type === 'predict_output';
+      if (predict) {
+        predictIds.add(ex.id);
+        if (!options.skipExpectations) applyExpectation(ex, exFile, expectations, diag);
+      }
       if (options.validateSpec) {
         const r = options.validateSpec(ex.type, ex.spec);
         if (!r.ok) for (const e of r.errors) diag.error(exFile, `spec: ${e}`);
@@ -196,7 +218,11 @@ export function checkContent(root: string, options: CheckOptions = {}): CheckRes
           for (const m of r.misconceptions ?? []) {
             if (!misconceptions.has(m)) diag.error(exFile, `spec: 없는 오개념입니다: ${m}`);
           }
-          for (const w of r.warnings ?? []) diag.warn(exFile, `spec: ${w}`);
+          for (const w of r.warnings ?? []) {
+            // A missing predict key is reported by applyExpectation with the command that fixes it.
+            if (predict && w.includes('content:check:run')) continue;
+            diag.warn(exFile, `spec: ${w}`);
+          }
         }
       }
       if (ex.review.status === 'approved') approved++;
@@ -289,7 +315,45 @@ export function checkContent(root: string, options: CheckOptions = {}): CheckRes
       );
   });
 
+  for (const id of Object.keys(expectations.entries)) {
+    if (!predictIds.has(id) && !options.skipExpectations)
+      diag.warn(
+        join(root, EXPECTATIONS_FILE),
+        `없는 predict_output 문제의 기대값입니다: ${id} (pnpm content:check:run이 정리합니다)`,
+      );
+  }
+
   return { source, diagnostics: diag, lessons, aliases };
+}
+
+/**
+ * Fills `spec.expected` of a predict_output exercise from the expectation store when the code
+ * has not changed since the last `check --run`. Approved exercises must have a fresh key (they
+ * ship and are graded against it); drafts only warn.
+ */
+function applyExpectation(
+  ex: ExerciseSource,
+  file: string,
+  store: ExpectationStore,
+  diag: Diagnostics,
+): void {
+  if (ex.spec['expected'] !== undefined && ex.spec['expected'] !== null) {
+    diag.error(
+      file,
+      'spec.expected는 직접 쓰지 않습니다. pnpm content:check:run이 실행해서 계산합니다',
+    );
+    return;
+  }
+  const entry = store.entries[ex.id];
+  if (entry?.inputHash === predictInputHash(ex.spec)) {
+    ex.spec['expected'] = entry.expected;
+    return;
+  }
+  const message = entry
+    ? '코드가 바뀌어 실행 기대값이 낡았습니다. pnpm content:check:run으로 다시 계산하세요'
+    : '실행 기대값이 아직 없습니다. pnpm content:check:run으로 계산하세요';
+  if (ex.review.status === 'approved') diag.error(file, message);
+  else diag.warn(file, message);
 }
 
 /**

@@ -1,5 +1,21 @@
-import type { GoRunner } from '@proginone/go-runner';
+import {
+  expectedFromObservation,
+  parseSpec,
+  type PredictObservation,
+  type PredictOutputSpec,
+} from '@proginone/exercise-kit';
+import type { GoRunner, GoRunResult } from '@proginone/go-runner';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import type { CheckResult } from './check.ts';
+import {
+  emptyStore,
+  EXPECTATIONS_FILE,
+  predictInputHash,
+  serializeExpectations,
+  writeExpectations,
+  type ExpectationStore,
+} from './expectations.ts';
 
 /** One lesson example as the run check sees it. */
 interface ExampleJob {
@@ -14,6 +30,20 @@ interface ExampleJob {
 export interface RunCheckStats {
   examples: number;
   passed: number;
+  /** predict_output exercises run, and how many got an answer key. */
+  predicts: number;
+  predictsPassed: number;
+  /** The expectation file differs from what the runs computed. */
+  expectationsChanged: boolean;
+  /** Written expectation file, when it changed and `frozen` was off. */
+  wrote: string | null;
+}
+
+export interface RunCheckOptions {
+  /** Content root, where `.generated/predict-expected.json` lives. */
+  root: string;
+  /** Fail instead of writing when the expectation file is out of date (CI). */
+  frozen?: boolean;
 }
 
 /** Random seed for checks: the same program prints the same thing on every run. */
@@ -43,6 +73,7 @@ function firstDifference(a: string, b: string): number {
 export async function runCheckContent(
   result: CheckResult,
   runner: Pick<GoRunner, 'run' | 'format'>,
+  options: RunCheckOptions,
 ): Promise<RunCheckStats> {
   const diag = result.diagnostics;
   const files = new Map(
@@ -108,5 +139,103 @@ export async function runCheckContent(
   jobs.forEach((job, i) => {
     for (const p of outcomes[i] ?? []) diag.error(job.file, `${at(job)}: ${p}`);
   });
-  return { examples: jobs.length, passed: outcomes.filter((p) => p.length === 0).length };
+  const predict = await runPredicts(result, runner, options);
+  return {
+    examples: jobs.length,
+    passed: outcomes.filter((p) => p.length === 0).length,
+    ...predict,
+  };
+}
+
+/** How a run ended, as a predict_output answer key sees it. */
+export function observationOf(result: GoRunResult): PredictObservation {
+  if (result.phase === 'compile') {
+    return result.compile.reason === 'compile-error'
+      ? { kind: 'compile-error' }
+      : { kind: 'other', reason: `compile ${result.compile.reason}` };
+  }
+  const { reason, exitCode, stdout } = result.run;
+  if (reason === 'exit' && exitCode === 0) return { kind: 'output', stdout };
+  if (reason === 'panic') return { kind: 'panic' };
+  return { kind: 'other', reason: reason === 'exit' ? `종료 코드 ${String(exitCode)}` : reason };
+}
+
+const sameObservation = (a: PredictObservation, b: PredictObservation) =>
+  JSON.stringify(a) === JSON.stringify(b);
+
+/**
+ * Runs every predict_output program (drafts included) and records its answer key
+ * (expectations.ts). Each program runs twice with different random seeds: a key that depends on
+ * randomness, such as map iteration order, would not be one answer.
+ */
+async function runPredicts(
+  result: CheckResult,
+  runner: Pick<GoRunner, 'run'>,
+  options: RunCheckOptions,
+): Promise<Omit<RunCheckStats, 'examples' | 'passed'>> {
+  const diag = result.diagnostics;
+  const exercises = result.source.courses.flatMap((c) =>
+    c.modules.flatMap((m) =>
+      m.lessons.flatMap((l) => l.exercises.filter((x) => x.data.type === 'predict_output')),
+    ),
+  );
+  const store: ExpectationStore = emptyStore();
+  const outcomes = await Promise.all(
+    exercises.map(async ({ file, data }) => {
+      let spec: PredictOutputSpec;
+      try {
+        // `expected` is ours to compute; the content check reports an authored one.
+        const { expected: _ignored, ...raw } = data.spec;
+        spec = parseSpec('predict_output', raw) as PredictOutputSpec;
+      } catch {
+        return null; // The content check reports the spec errors.
+      }
+      const program = {
+        files: [
+          { name: 'main.go', content: spec.code.endsWith('\n') ? spec.code : `${spec.code}\n` },
+        ],
+        ...(spec.stdin === undefined ? {} : { stdin: spec.stdin }),
+      };
+      const first = observationOf(await runner.run({ ...program, randomSeed: SEED }));
+      const second = observationOf(await runner.run({ ...program, randomSeed: SEED + 1 }));
+      if (!sameObservation(first, second)) {
+        return {
+          file,
+          error:
+            '실행할 때마다 결과가 다릅니다(맵 순회 순서, 난수 등). 결과가 하나로 정해지는 코드를 쓰세요',
+        };
+      }
+      const key = expectedFromObservation(spec, first);
+      if (!key.ok) return { file, error: key.message };
+      store.entries[data.id] = { inputHash: predictInputHash(data.spec), expected: key.expected };
+      return { file, error: null };
+    }),
+  );
+  for (const o of outcomes) if (o?.error) diag.error(o.file, `실행 검증: ${o.error}`);
+
+  const name = join(options.root, EXPECTATIONS_FILE);
+  let current = '';
+  try {
+    current = readFileSync(name, 'utf8');
+  } catch {
+    // No file yet.
+  }
+  const next = serializeExpectations(store);
+  const empty = serializeExpectations(emptyStore());
+  const expectationsChanged = current !== next && !(current === '' && next === empty);
+  let wrote: string | null = null;
+  if (expectationsChanged) {
+    if (options.frozen) {
+      diag.error(
+        name,
+        '실행 기대값 파일이 최신이 아닙니다. pnpm content:check:run을 실행하고 결과를 커밋하세요',
+      );
+    } else wrote = writeExpectations(options.root, store);
+  }
+  return {
+    predicts: exercises.length,
+    predictsPassed: outcomes.filter((o) => o !== null && o.error === null).length,
+    expectationsChanged,
+    wrote,
+  };
 }

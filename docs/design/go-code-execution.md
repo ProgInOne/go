@@ -6,7 +6,7 @@
 - 상태: 승인됨
 - 작성: AI 초안, 사용자 승인(2026-11-25)
 - 최종 수정: 2026-11-25
-- 관련 문서: [결정 기록](/docs/decisions.md), [JavaScript 코드 실행 샌드박스 설계][js-sandbox], [JavaScript 콘텐츠·문제 시스템 설계][js-content]
+- 관련 문서: [결정 기록](/docs/decisions.md)(G-002, 채점 세부는 [G-003](/docs/decisions.md#g-003-go-코드-문제의-채점-세부--확정)), [JavaScript 코드 실행 샌드박스 설계][js-sandbox], [JavaScript 콘텐츠·문제 시스템 설계][js-content]
 
 [js-sandbox]: https://github.com/ProgInOne/javascript/blob/develop/docs/design/code-execution-sandbox.md
 [js-content]: https://github.com/ProgInOne/javascript/blob/develop/docs/design/content-and-exercises.md
