@@ -26,7 +26,11 @@ const body = [
 ];
 
 /** A tiny content.db (2 lessons, an assessment, 2 concepts, choice exercises) written with the real DDL. */
-export function writeContentDb(meta: Record<string, string> = {}): string {
+export function writeContentDb(
+  meta: Record<string, string> = {},
+  /** Extra exercises for one test (e.g. a code exercise), added to the first lesson by default. */
+  extra: readonly FixtureExercise[] = [],
+): string {
   const path = join(tmpDir('proginone-contentdb-'), 'content.db');
   const db = new Database(path);
   db.exec(CONTENT_DDL);
@@ -153,6 +157,7 @@ export function writeContentDb(meta: Record<string, string> = {}): string {
     ...LESSON_BLOCK_EXERCISES,
     ...REMEDIAL_EXERCISES,
     ...ASSESSMENT_EXERCISES,
+    ...extra,
   ]) {
     ins('exercises', {
       id: ex.id,
@@ -220,7 +225,7 @@ export const ANSWER_KEY_FIELDS = [
   'answer',
 ];
 
-interface FixtureExercise {
+export interface FixtureExercise {
   id: string;
   type: string;
   difficulty: number;

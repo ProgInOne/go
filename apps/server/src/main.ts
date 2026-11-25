@@ -229,6 +229,7 @@ const app = createApp({
     engine,
     now: learningClock,
     hintPolicy: () => settings.get()['hints.policy'],
+    codeRunner: { runPlan: (plan) => go.runPlan(plan) },
   }),
   ai: { ai, tutor, memory, evaluator },
   go,

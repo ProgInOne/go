@@ -1,4 +1,5 @@
-import { randomInt } from 'node:crypto';
+import { randomBytes, randomInt } from 'node:crypto';
+import { executeRunPlan, type GoRun, type GoRunPlan } from '@proginone/exercise-kit';
 import {
   createGoRunner,
   findGoToolchain,
@@ -9,6 +10,7 @@ import {
   type GoRunResult,
   type ToolchainLookup,
 } from '@proginone/go-runner';
+import { AppError } from '../../http/errors.ts';
 import type { Logger } from '../../observability/logger.ts';
 
 /** What the web app shows about the learner's Go (G-002). Paths are local, never sent elsewhere. */
@@ -24,6 +26,17 @@ export interface GoToolchainStatus {
   matchesContentVersion: boolean | null;
   /** Where the app looked, when no Go was found. */
   searched: string[];
+}
+
+/** The API error for "Go is missing or too old" (409, `details.reason: go-unavailable`). */
+export function unavailableAppError(status: GoToolchainStatus): AppError {
+  const message =
+    status.status === 'too-old'
+      ? `Go ${status.minVersion.slice(2)} 이상이 필요해요. 지금 찾은 Go는 ${status.version ?? '알 수 없음'}이에요.`
+      : 'Go를 찾지 못했어요. Go를 설치한 뒤 다시 확인해 주세요.';
+  return new AppError('EXERCISE_NOT_RUNNABLE', 409, message, {
+    details: { reason: 'go-unavailable', toolchain: status },
+  });
 }
 
 export class GoUnavailableError extends Error {
@@ -172,6 +185,24 @@ export class GoService {
       );
     }
     return result;
+  }
+
+  /**
+   * Runs a code exercise's plan for grading (G-003). The harness marker is random for each
+   * submission, so the learner's program cannot print a fake result line.
+   */
+  async runPlan(plan: GoRunPlan): Promise<GoRun> {
+    if (!this.runner) throw unavailableAppError(this.status());
+    const runner = this.runner;
+    const started = performance.now();
+    const run = await executeRunPlan(plan, randomBytes(16).toString('hex'), (input) =>
+      runner.run(input),
+    );
+    this.options.log.info(
+      { runs: run.runs.map((r) => r.outcome), ms: Math.round(performance.now() - started) },
+      'go grading run',
+    );
+    return run;
   }
 
   async format(source: string): Promise<FormatResult> {

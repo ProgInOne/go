@@ -27,7 +27,7 @@ pnpm start               # 프로덕션 모드: OS 표준 위치의 ProgInOne Go
 
 ## 아직 없는 것
 
-코드 문제의 채점은 G-002의 다음 단계에서 더합니다. 그때까지 다음은 없습니다.
+코드 작성 문제(`implement_function`)는 `POST /attempts`가 먼저 문제 유형의 실행 계획을 학습자의 Go로 실행하고(`AttemptService.submitGraded`, `GoService.runPlan`) 그 결과로 채점합니다. 클라이언트가 보낸 실행 결과는 받지 않습니다(400). 아직 다음은 없습니다.
 
 - 실행 계획(`/exercises/:id/run-plan`), 직접 써 보기(`/exercises/:id/try-attempts`), 프로젝트 화면, 예제 코드 초안
 - 러너 셸(`/sandbox/*`)과 그 하위 도메인 허용. 호스트는 `127.0.0.1`·`localhost`만 받습니다.

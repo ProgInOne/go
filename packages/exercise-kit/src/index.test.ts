@@ -23,14 +23,21 @@ describe('Go exercise registry', () => {
     expect(EXERCISE_TYPE_IDS).toContain('predict_output');
   });
 
-  it('rejects run results: no type grades with one yet', () => {
-    expect(checkSpec('implement_function', {})).toMatchObject({ ok: false });
+  it('validates run results with the Go runner contract', () => {
     expect(() =>
       gradeSubmission({
         typeId: 'mcq_single',
         spec,
         answer: { optionId: 'a' },
         run: { status: 'completed' },
+      }),
+    ).toThrow(ExerciseKitError);
+    expect(() =>
+      gradeSubmission({
+        typeId: 'implement_function',
+        spec: {},
+        answer: { code: '' },
+        run: { marker: 'short', runs: [] },
       }),
     ).toThrow(ExerciseKitError);
   });

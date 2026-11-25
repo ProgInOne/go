@@ -12,7 +12,8 @@ import { SettingsService } from '../services/settings/service.ts';
 import { EvaluatorService } from '../services/tutor/evaluator-service.ts';
 import { MemoryService } from '../services/tutor/memory-service.ts';
 import { TutorService } from '../services/tutor/tutor-service.ts';
-import { writeContentDb } from './content-fixture.ts';
+import { writeContentDb, type FixtureExercise } from './content-fixture.ts';
+import type { CodeRunner } from '../services/practice/attempt-service.ts';
 import { setupDb, silentLog } from './helpers.ts';
 
 /** 2026-11-14 10:00 Asia/Seoul. */
@@ -27,10 +28,16 @@ let engine: ReturnType<typeof createEngine> | undefined;
  * clock (`clock.now`) and a learner in Asia/Seoul. AI routes use a `MockProvider` (`ai.provider`).
  */
 export async function practiceApp(
-  options: { engineConfig?: (config: EngineConfig) => EngineConfig } = {},
+  options: {
+    engineConfig?: (config: EngineConfig) => EngineConfig;
+    /** Extra exercises in the fixture content.db (writeContentDb). */
+    extraExercises?: readonly FixtureExercise[];
+    /** Runs code exercises (G-003); without it they answer 409. */
+    codeRunner?: CodeRunner;
+  } = {},
 ) {
   const ctx = await setupDb();
-  const contentPath = writeContentDb();
+  const contentPath = writeContentDb({}, options.extraExercises ?? []);
   const content = ContentAccess.open(contentPath);
   const clock = { now: T0 };
   const now = () => clock.now;
@@ -43,6 +50,7 @@ export async function practiceApp(
       : (engine ??= createEngine())),
     now,
     hintPolicy: () => settings.get()['hints.policy'],
+    ...(options.codeRunner ? { codeRunner: options.codeRunner } : {}),
   });
   const provider = new MockProvider({ deltaDelayMs: 0 });
   const models = new ModelSelection({

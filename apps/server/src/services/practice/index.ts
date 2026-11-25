@@ -17,7 +17,7 @@ import { RelatedExercisesService } from '../learning/related-exercises-service.t
 import { MasteryChangeService } from '../review/mastery-change-service.ts';
 import { MistakeService } from '../review/mistake-service.ts';
 import { ReviewService } from '../review/review-service.ts';
-import { AttemptService } from './attempt-service.ts';
+import { AttemptService, type CodeRunner } from './attempt-service.ts';
 import { ExerciseService } from './exercise-service.ts';
 import { PracticeSetService } from './practice-set-service.ts';
 import { WeaknessService } from './weakness.ts';
@@ -30,6 +30,8 @@ export interface PracticeDeps {
   now: Clock;
   /** `hints.policy` from settings, read on every hint request (JS D-047). */
   hintPolicy?: () => HintPolicy;
+  /** Runs code exercises with the learner's Go (G-003). */
+  codeRunner?: CodeRunner;
 }
 
 /** Services behind the learning-record API (practice, reading, review, activity), created once. */

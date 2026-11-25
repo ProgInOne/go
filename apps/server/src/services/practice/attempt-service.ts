@@ -1,9 +1,12 @@
 import { createHash } from 'node:crypto';
 import {
+  buildRunPlan,
   exerciseOriginOf,
   gradeSubmission,
   parseAnswer,
   redactSpec,
+  type GoRun,
+  type GoRunPlan,
   type GradeResult,
 } from '@proginone/exercise-kit';
 import {
@@ -117,6 +120,16 @@ export interface AttemptServiceDeps {
   content: ContentAccess;
   engine: EngineDeps;
   now: Clock;
+  /**
+   * Runs a code exercise's plan with the learner's Go (G-002, G-003). Without it, exercises that
+   * need a run cannot be submitted (409 `EXERCISE_NOT_RUNNABLE`).
+   */
+  codeRunner?: CodeRunner;
+}
+
+/** Executes a run plan on the server; throws an `AppError` when Go is unavailable. */
+export interface CodeRunner {
+  runPlan(plan: GoRunPlan): Promise<GoRun>;
 }
 
 /** A pending rating with its row id (`isNew`: created by this attempt). */
@@ -187,9 +200,55 @@ export class AttemptService {
     this.#content = deps.content;
     this.#engine = deps.engine;
     this.#now = deps.now;
+    this.#codeRunner = deps.codeRunner;
   }
 
-  submit(request: AttemptRequest): SubmitAttemptResponse {
+  readonly #codeRunner: CodeRunner | undefined;
+
+  /**
+   * `POST /attempts`: for an exercise that needs a run, the server first runs the type's plan
+   * with the learner's Go (G-003), then grades like any other submission. A run result sent by
+   * the client is never used.
+   */
+  async submitGraded(request: AttemptRequest): Promise<SubmitAttemptResponse> {
+    if (request.runResult !== undefined) {
+      throw new AppError(
+        'VALIDATION_RUN_RESULT_INVALID',
+        400,
+        'Go 코드는 서버가 실행해요. 실행 결과를 보내지 마세요.',
+      );
+    }
+    const { learnerId } = learnerContext(this.#userDb);
+    const found = findItem(this.#userDb.orm, learnerId, request.practiceSetItemId);
+    const exercise = this.#content.repo.getExercise(request.exerciseId);
+    // Anything off about the item is reported by submit(), before any code runs.
+    if (found?.item.exerciseId !== request.exerciseId || !exercise) return this.submit(request);
+    const { def, spec } = loadSpec(exercise);
+    if (!def.requiresRun(spec)) return this.submit(request);
+    const answer = kit(() => parseAnswer(exercise.type, request.answer));
+    const plan = kit(() =>
+      buildRunPlan({ typeId: exercise.type, spec, answer, purpose: 'grading' }),
+    );
+    if (!this.#codeRunner) {
+      throw new AppError('EXERCISE_NOT_RUNNABLE', 409, 'Go 코드를 실행할 수 없어요.', {
+        details: { reason: 'go-unavailable' },
+      });
+    }
+    return this.submit(request, await this.#codeRunner.runPlan(plan));
+  }
+
+  /**
+   * Grades and records one submission. `serverRun` is the run the server made for a code
+   * exercise (see {@link submitGraded}).
+   */
+  submit(request: AttemptRequest, serverRun?: GoRun): SubmitAttemptResponse {
+    if (request.runResult !== undefined) {
+      throw new AppError(
+        'VALIDATION_RUN_RESULT_INVALID',
+        400,
+        'Go 코드는 서버가 실행해요. 실행 결과를 보내지 마세요.',
+      );
+    }
     const now = this.#now();
     const orm = this.#userDb.orm;
     const repo = this.#content.repo;
@@ -236,8 +295,7 @@ export class AttemptService {
       });
     }
 
-    // 2. Grade with the server-side spec. No Go code runs yet (G-001): the registry has no runner
-    // contract, so a request that carries a run result is rejected (400) rather than ignored.
+    // 2. Grade with the server-side spec and, for code exercises, the server's own run (G-003).
     const { spec } = loadSpec(exercise);
     const answer = kit(() => parseAnswer(exercise.type, request.answer));
     const grade = kit(() =>
@@ -245,7 +303,7 @@ export class AttemptService {
         typeId: exercise.type,
         spec,
         answer,
-        ...(request.runResult === undefined ? {} : { run: request.runResult }),
+        ...(serverRun === undefined ? {} : { run: serverRun }),
       }),
     );
     const misconceptions = repo.getMisconceptions(grade.misconceptionIds);

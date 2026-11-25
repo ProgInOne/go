@@ -52,3 +52,24 @@ export function toolchainProblem(status: GoToolchain): string | null {
       return 'Go를 찾았지만 실행하지 못했어요. 설치 상태를 확인해 주세요.';
   }
 }
+
+/** How failed code checks read in the result banner (JS D-097: the language owns its checks). */
+export const GO_CHECK_LABELS = {
+  kind: (kind: string): string | undefined => ({ call: '함수 호출', stdout: '출력' })[kind],
+  reason: (reason: string): string | undefined =>
+    (
+      ({
+        MISMATCH: '결과가 달라요',
+        PANIC: 'panic이 났어요',
+        TIMEOUT: '시간 안에 끝나지 않았어요',
+        MEMORY: '메모리를 너무 많이 썼어요',
+        OUTPUT_LIMIT: '출력이 너무 많아요',
+        FATAL: 'Go 런타임이 멈췄어요',
+        EXIT_CODE: '0이 아닌 종료 코드로 끝났어요',
+        COMPILE_ERROR: '컴파일 오류',
+        COMPILE_TIMEOUT: '컴파일 시간 초과',
+        NO_RESULT: '결과가 없어요',
+        CRASH: '실행 환경 문제',
+      }) as Record<string, string>
+    )[reason],
+};
