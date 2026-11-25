@@ -7,6 +7,9 @@
 
 ### Added
 
+- 레슨 실행 예제(G-002): MDX `<RunnableExample lang="go">`(`id`, `predict`, `editable`, `expectError`)를 content-cli가 검사하고, 웹이 서버에서 실행해 출력·컴파일 오류·멈춘 이유·가상 시간을 보여 줌. 예측 후 실행, 코드 수정(Go 에디터, 처음 쓸 때 불러옴), "gofmt로 정리", 컴파일 오류 줄 표시
+- 설정 > Go 실행 환경: 찾은 Go 버전과 위치, 콘텐츠 검증 버전과 다를 때 안내, 설치 안내, 다시 찾기
+- E2E에서 실제 Go로 실행 예제 확인, CI의 E2E 검사에 Go 설치
 - 서버 Go 실행 API(G-002): 학습자 Go 찾기와 상태·다시 찾기(`/go/toolchain`), `main.go` 하나의 자유 실행(`/go/run`, 표준 입력, 실행마다 새 난수 시드), `gofmt`(`/go/format`). 시작할 때 Go를 찾고 빌드 캐시를 미리 채움. 설정 `goPath`(`PROGINONE_GO_PATH`). Go가 없으면 `EXERCISE_NOT_RUNNABLE`(`details.reason: go-unavailable`)
 - Go 실행기 `packages/go-runner`(G-002): 학습자의 Go(1.22 이상) 찾기, 깨끗한 환경의 `wasip1` 컴파일, Worker 스레드와 최소 WASI로 격리 실행(표준 입출력, 가상 시계, 시드 난수만), 시간·메모리·출력 한도, 동시 실행 제한, `gofmt`. CI에 Go 설치(`.go-version`)
 - 문서: Go 코드 실행과 채점 결정(G-002)과 [설계 문서](/docs/design/go-code-execution.md)

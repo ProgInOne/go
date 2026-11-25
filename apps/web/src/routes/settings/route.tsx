@@ -9,6 +9,7 @@ const SECTIONS = [
   { to: '/settings/goals', label: '학습 목표' },
   { to: '/settings/learning', label: '학습 방식' },
   { to: '/settings/ai', label: 'AI' },
+  { to: '/settings/go', label: 'Go 실행 환경' },
   { to: '/settings/appearance', label: '화면' },
   { to: '/settings/data', label: '데이터' },
 ] as const;

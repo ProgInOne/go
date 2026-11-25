@@ -115,6 +115,12 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      # Lesson examples run on the real Go in the E2E server (G-002).
+      - uses: actions/setup-go@v7
+        with:
+          go-version-file: .go-version
+          cache: false
+
       - run: pnpm build
 
       # The real content must build too (the suite itself reads the fixture pack, e2e/fixtures).
