@@ -13,6 +13,7 @@
   "dependencies": {
     "@proginone/content-schema": "^0.2.0",
     "@proginone/exercise-kit": "workspace:*",
+    "@proginone/go-runner": "workspace:*",
     "better-sqlite3": "^13.2.0",
     "jsdom": "^31.0.1",
     "mermaid": "^12.3.0",
