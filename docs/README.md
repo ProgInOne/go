@@ -20,6 +20,12 @@ ProgInOne Go 저장소의 모든 문서 목록과 읽는 순서입니다.
 | [기여 가이드](/CONTRIBUTING.md) | 브랜치, 커밋, 리뷰, 완료 정의 |
 | [변경 이력](/CHANGELOG.md) | 릴리스별 변경 사항 |
 
+## 설계
+
+| 문서 | 설명 |
+|---|---|
+| [Go 코드 실행과 채점](/docs/design/go-code-execution.md) | 도구 체인, wasip1 컴파일과 최소 WASI 실행, 서버 채점, 문제 유형 순서, 에디터, 콘텐츠 실행 검증 |
+
 ## 가이드
 
 | 문서 | 설명 |
@@ -43,5 +49,4 @@ ProgInOne Go 저장소의 모든 문서 목록과 읽는 순서입니다.
 
 | 문서 | 작성 시점 |
 |---|---|
-| Go 콘텐츠·문제 유형, 코드 실행 샌드박스, 에디터 설계 | Go 전용 설계 단계 |
 | 패키지별 `README.md` | 각 패키지 생성 시 ([exercise-kit](/packages/exercise-kit/README.md), [server](/apps/server/README.md)) |
