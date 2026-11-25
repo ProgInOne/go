@@ -1,10 +1,15 @@
 import {
+  buildRunPlan,
+  executeRunPlan,
   expectedFromObservation,
+  gradeSubmission,
   parseSpec,
+  type ImplementFunctionSpec,
   type PredictObservation,
   type PredictOutputSpec,
 } from '@proginone/exercise-kit';
 import type { GoRunner, GoRunResult } from '@proginone/go-runner';
+import { randomBytes } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import type { CheckResult } from './check.ts';
@@ -33,6 +38,9 @@ export interface RunCheckStats {
   /** predict_output exercises run, and how many got an answer key. */
   predicts: number;
   predictsPassed: number;
+  /** implement_function exercises checked, and how many passed (solution passes, starter fails). */
+  codeExercises: number;
+  codeExercisesPassed: number;
   /** The expectation file differs from what the runs computed. */
   expectationsChanged: boolean;
   /** Written expectation file, when it changed and `frozen` was off. */
@@ -140,10 +148,12 @@ export async function runCheckContent(
     for (const p of outcomes[i] ?? []) diag.error(job.file, `${at(job)}: ${p}`);
   });
   const predict = await runPredicts(result, runner, options);
+  const code = await runCodeExercises(result, runner);
   return {
     examples: jobs.length,
     passed: outcomes.filter((p) => p.length === 0).length,
     ...predict,
+    ...code,
   };
 }
 
@@ -172,7 +182,7 @@ async function runPredicts(
   result: CheckResult,
   runner: Pick<GoRunner, 'run'>,
   options: RunCheckOptions,
-): Promise<Omit<RunCheckStats, 'examples' | 'passed'>> {
+): Promise<Omit<RunCheckStats, 'examples' | 'passed' | 'codeExercises' | 'codeExercisesPassed'>> {
   const diag = result.diagnostics;
   const exercises = result.source.courses.flatMap((c) =>
     c.modules.flatMap((m) =>
@@ -237,5 +247,78 @@ async function runPredicts(
     predictsPassed: outcomes.filter((o) => o !== null && o.error === null).length,
     expectationsChanged,
     wrote,
+  };
+}
+
+/**
+ * implement_function (G-003): the starter and solution are gofmt-formatted, the solution passes
+ * every check and the starter fails at least one, graded exactly the way the server grades.
+ */
+async function runCodeExercises(
+  result: CheckResult,
+  runner: Pick<GoRunner, 'run' | 'format'>,
+): Promise<{ codeExercises: number; codeExercisesPassed: number }> {
+  const diag = result.diagnostics;
+  const exercises = result.source.courses.flatMap((c) =>
+    c.modules.flatMap((m) =>
+      m.lessons.flatMap((l) => l.exercises.filter((x) => x.data.type === 'implement_function')),
+    ),
+  );
+  const outcomes = await Promise.all(
+    exercises.map(async ({ file, data }) => {
+      let spec: ImplementFunctionSpec;
+      try {
+        spec = parseSpec('implement_function', data.spec) as ImplementFunctionSpec;
+      } catch {
+        return null; // The content check reports the spec errors.
+      }
+      const problems: string[] = [];
+      for (const [name, code] of [
+        ['starter', spec.starter],
+        ['solution', spec.solution],
+      ] as const) {
+        const formatted = await runner.format(asFile(code));
+        if (!formatted.ok) problems.push(`${name}를 gofmt로 정리하지 못했습니다`);
+        else if (formatted.source !== asFile(code)) {
+          problems.push(
+            `${name}가 gofmt 형식이 아닙니다(${String(firstDifference(asFile(code), formatted.source))}번째 줄부터)`,
+          );
+        }
+      }
+      const grade = async (code: string) => {
+        const answer = { code: asFile(code) };
+        const plan = buildRunPlan({
+          typeId: 'implement_function',
+          spec,
+          answer,
+          purpose: 'grading',
+        });
+        const run = await executeRunPlan(plan, randomBytes(16).toString('hex'), (input) =>
+          runner.run(input),
+        );
+        return gradeSubmission({ typeId: 'implement_function', spec, answer, run });
+      };
+      const solved = await grade(spec.solution);
+      if (!solved.correct) {
+        const failed = (solved.checkResults ?? []).filter((c) => !c.passed).map((c) => c.id);
+        const why = solved.feedback
+          .find((f) => f.level === 'error')
+          ?.message.split('\n')
+          .slice(0, 2)
+          .join(' ');
+        problems.push(
+          `모범 답안이 통과하지 못합니다${failed.length > 0 ? `(${failed.join(', ')})` : ''}${why ? `: ${why}` : ''}`,
+        );
+      }
+      if ((await grade(spec.starter)).correct) {
+        problems.push('시작 코드만으로 모든 사례를 통과합니다. 학습자가 고칠 것이 없습니다');
+      }
+      for (const p of problems) diag.error(file, `실행 검증: ${p}`);
+      return problems.length === 0;
+    }),
+  );
+  return {
+    codeExercises: exercises.length,
+    codeExercisesPassed: outcomes.filter((o) => o === true).length,
   };
 }

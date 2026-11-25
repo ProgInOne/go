@@ -1,7 +1,10 @@
 // The exercise model and renderer of this repository's exercise types: the common choice types
 // (@proginone/exercise-ui's choice model) and the Go types (G-002).
 import {
+  implementFunctionPublicSpecSchema,
   predictOutputPublicSpecSchema,
+  type ImplementFunctionAnswer,
+  type ImplementFunctionPublicSpec,
   type PredictOutputPublicSpec,
 } from '@proginone/exercise-kit';
 import {
@@ -15,16 +18,22 @@ import {
   type ChoiceExercise,
   type ChoiceTypeId,
 } from '@proginone/exercise-ui';
+import { ImplementFunction } from './ImplementFunction.tsx';
 import { PredictOutput, type PredictOutputDraft } from './PredictOutput.tsx';
 
-export type RenderableTypeId = ChoiceTypeId | 'predict_output';
+export type RenderableTypeId = ChoiceTypeId | 'predict_output' | 'implement_function';
 export interface PredictExercise {
   typeId: 'predict_output';
   spec: PredictOutputPublicSpec;
 }
-export type RenderableExercise = ChoiceExercise | PredictExercise;
+export interface ImplementExercise {
+  typeId: 'implement_function';
+  spec: ImplementFunctionPublicSpec;
+}
+export type RenderableExercise = ChoiceExercise | PredictExercise | ImplementExercise;
 export interface AnswerByType extends ChoiceAnswerByType {
   predict_output: PredictOutputDraft;
+  implement_function: ImplementFunctionAnswer;
 }
 
 /** Validates a public spec from the server; null for a type this app cannot render. */
@@ -32,6 +41,10 @@ export function parsePublicSpec(typeId: string, raw: unknown): RenderableExercis
   if (isChoiceType(typeId)) return parseChoicePublicSpec(typeId, raw);
   if (typeId === 'predict_output') {
     const parsed = predictOutputPublicSpecSchema.safeParse(raw);
+    return parsed.success ? { typeId, spec: parsed.data } : null;
+  }
+  if (typeId === 'implement_function') {
+    const parsed = implementFunctionPublicSpecSchema.safeParse(raw);
     return parsed.success ? { typeId, spec: parsed.data } : null;
   }
   return null;
@@ -42,6 +55,7 @@ export function initialAnswer(exercise: RenderableExercise): AnswerByType[Render
   if (exercise.typeId === 'predict_output') {
     return exercise.spec.answerKind === 'output' ? { output: '' } : null;
   }
+  if (exercise.typeId === 'implement_function') return { code: exercise.spec.starter };
   return choiceInitialAnswer(exercise);
 }
 
@@ -55,6 +69,11 @@ export function isAnswerReady(
     if ('output' in answer) return typeof answer.output === 'string' && answer.output.trim() !== '';
     return 'choiceId' in answer;
   }
+  if (exercise.typeId === 'implement_function') {
+    return (
+      typeof answer === 'object' && answer !== null && 'code' in answer && answer.code.trim() !== ''
+    );
+  }
   return isChoiceAnswerReady(exercise, answer as ChoiceAnswerByType[ChoiceTypeId]);
 }
 
@@ -65,6 +84,7 @@ export function notReadyReason(exercise: RenderableExercise): string {
       ? '예상한 출력을 적어 주세요'
       : '보기를 골라 주세요';
   }
+  if (exercise.typeId === 'implement_function') return '코드를 작성해 주세요';
   return choiceNotReadyReason(exercise);
 }
 
@@ -87,6 +107,17 @@ export function ExerciseRenderer({ exercise, value, onChange, ...rest }: Exercis
       <PredictOutput
         spec={exercise.spec}
         value={value as PredictOutputDraft}
+        onChange={onChange}
+        {...common}
+      />
+    );
+  }
+  if (exercise.typeId === 'implement_function') {
+    const { correctOptionId: _ignored, ...common } = rest;
+    return (
+      <ImplementFunction
+        spec={exercise.spec}
+        value={value as ImplementFunctionAnswer}
         onChange={onChange}
         {...common}
       />

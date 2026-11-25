@@ -7,6 +7,8 @@
 
 ### Added
 
+- 코드 작성 문제 `implement_function`(G-003): `entry` 함수의 `call` 사례(하네스가 반환 타입에 맞춰 `reflect.DeepEqual`로 비교, 숨겨진 사례) 또는 프로그램 전체의 `stdout` 사례. 서버가 제출마다 실행 계획을 학습자의 Go로 실행해 채점하고(비밀 표지로 결과 위조 방지, 클라이언트 실행 결과 거부), `content:check:run`이 모범 답안 통과·시작 코드 실패·gofmt 형식을 확인. 웹은 Go 에디터 작업대, 사례 목록, gofmt, 처음 코드로, 프로그램 문제의 "실행", 체크 결과 문구
+- 설정 > 화면의 "작업대 테마"를 다시 보여 줌
 - 출력 예측 문제 `predict_output`(G-003): 출력 전체를 적는 `output`과 보기를 고르는 `choice`("컴파일 오류"·"panic" 보기 포함). `content:check:run`이 프로그램을 두 시드로 실행해 정답을 `content/.generated/predict-expected.json`에 기록하고(결정론 확인), `check`·`build`가 채움. CI는 `--frozen`. 웹 렌더러(코드, 표준 입력, 출력 입력칸 또는 보기)
 - 문서: Go 코드 문제의 채점 세부(G-003)
 - 콘텐츠 실행 검증 `pnpm content:check:run`(G-002): 레슨 `<RunnableExample>`을 실제 Go로 컴파일·실행하고 gofmt 형식인지 검사(오류 없이 끝나야 하고, `expectError`는 컴파일 오류가 나야 함). CI에서 `.go-version`의 Go로 실행

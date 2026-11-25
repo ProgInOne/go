@@ -180,4 +180,60 @@ describe.skipIf(lookup.status !== 'ok')('runCheckContent', () => {
       );
     });
   });
+
+  describe('implement_function', () => {
+    const CODE_YAML =
+      'courses/go-basics/modules/01-start/lessons/01-first-program/exercises/003-implement.yaml';
+    const implement = (spec: Record<string, unknown>) =>
+      writeContent((files) => {
+        files[CODE_YAML] = {
+          id: 'go-basics.start.first-program.implement-add',
+          type: 'implement_function',
+          difficulty: 2,
+          concepts: [{ id: 'go.basics.println', weight: 1 }],
+          estimatedSeconds: 120,
+          prompt: 'Add를 완성하세요.',
+          spec,
+          hints: ['a', 'b', 'c'],
+          explanation: '설명',
+          review: { status: 'draft', draftedBy: 'ai:claude' },
+        };
+      });
+    const spec = {
+      starter: 'package main\n\nfunc Add(a, b int) int {\n\treturn 0\n}',
+      solution: 'package main\n\nfunc Add(a, b int) int {\n\treturn a + b\n}',
+      entry: 'Add',
+      checks: [{ id: 'small', kind: 'call', args: ['3', '4'], want: ['7'] }],
+    };
+    const run = async (s: Record<string, unknown>) => {
+      const root = implement(s);
+      const result = checkContent(root, { skipExpectations: true });
+      const stats = await runCheckContent(result, runner, { root });
+      return {
+        stats,
+        messages: result.diagnostics.items
+          .filter((d) => d.file.includes('implement'))
+          .map((d) => d.message),
+      };
+    };
+
+    it('passes when the solution passes and the starter does not', async () => {
+      const { stats, messages } = await run(spec);
+      expect(messages).toEqual([]);
+      expect(stats).toMatchObject({ codeExercises: 1, codeExercisesPassed: 1 });
+    });
+
+    it('reports a failing solution, a starter that already passes, and unformatted code', async () => {
+      const { messages } = await run({
+        ...spec,
+        starter: spec.solution,
+        solution: 'package main\n\nfunc Add(a, b int) int {\n    return a - b\n}',
+      });
+      expect(messages).toEqual([
+        expect.stringContaining('solution가 gofmt 형식이 아닙니다'),
+        expect.stringContaining('모범 답안이 통과하지 못합니다(small)'),
+        expect.stringContaining('시작 코드만으로 모든 사례를 통과합니다'),
+      ]);
+    });
+  });
 });

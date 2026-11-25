@@ -1,6 +1,10 @@
 import { Hono } from 'hono';
 import { z } from 'zod';
-import { GoUnavailableError, type GoService } from '../../services/go/go-service.ts';
+import {
+  GoUnavailableError,
+  unavailableAppError,
+  type GoService,
+} from '../../services/go/go-service.ts';
 import type { AppEnv } from '../env.ts';
 import { AppError } from '../errors.ts';
 import { jsonBody, limitBody } from './input.ts';
@@ -15,21 +19,11 @@ const runBodySchema = z.strictObject({
 });
 const formatBodySchema = z.strictObject({ source: z.string().max(MAX_SOURCE_CHARS) });
 
-function unavailable(e: GoUnavailableError): AppError {
-  const message =
-    e.status.status === 'too-old'
-      ? `Go ${e.status.minVersion.slice(2)} 이상이 필요해요. 지금 찾은 Go는 ${e.status.version ?? '알 수 없음'}이에요.`
-      : 'Go를 찾지 못했어요. Go를 설치한 뒤 다시 확인해 주세요.';
-  return new AppError('EXERCISE_NOT_RUNNABLE', 409, message, {
-    details: { reason: 'go-unavailable', toolchain: e.status },
-  });
-}
-
 async function withGo<T>(task: () => Promise<T>): Promise<T> {
   try {
     return await task();
   } catch (e) {
-    if (e instanceof GoUnavailableError) throw unavailable(e);
+    if (e instanceof GoUnavailableError) throw unavailableAppError(e.status);
     throw e;
   }
 }

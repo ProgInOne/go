@@ -1,3 +1,4 @@
+import { GO_CHECK_LABELS } from '../go/messages.ts';
 import {
   ConfidencePicker,
   FeedbackBanner,
@@ -445,6 +446,7 @@ function ItemWorkspace({
         }))}
         {...(result ? { explanation: <Markdown text={result.grade.explanation} /> } : {})}
         actions={actions}
+        checkLabels={GO_CHECK_LABELS}
       />
       {result && !result.attempt.correct && result.attempt.engineApplied && (
         <AiMistakeExplanation key={result.attempt.id} attemptId={result.attempt.id} />

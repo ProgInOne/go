@@ -100,7 +100,7 @@ describe('설정 > 화면', () => {
     await waitFor(() => {
       expect(document.documentElement.style.getPropertyValue('--lesson-font-size')).toBe('1.25rem');
     });
-    expect(screen.queryByRole('radiogroup', { name: '작업대 테마' })).toBeNull();
+    expect(screen.getByRole('radiogroup', { name: '작업대 테마' })).toBeInTheDocument();
     expect(calls.filter((c) => c.method === 'PATCH').map((c) => c.body)).toEqual([
       { 'lesson.fontSize': 'large' },
     ]);

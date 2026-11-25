@@ -20,10 +20,10 @@ export function practiceSetRoutes(service: PracticeSetService, attempts: Attempt
     .post('/:id/finish', (c) => c.json(attempts.finish(rowIdParam(c.req.param('id')))));
 }
 
-/** `/attempts`. Bodies carry learner code and a sandbox `RunResult` (≤ 1MB by contract). */
+/** `/attempts`. Bodies carry the answer (learner code up to 64 KB); the server runs code (G-003). */
 export function attemptRoutes(service: AttemptService) {
   return new Hono<AppEnv>().use(limitBody(3 * 1024 * 1024)).post('/', async (c) => {
     const request = attemptRequestSchema.parse(await jsonBody(c));
-    return c.json(service.submit(request), 201);
+    return c.json(await service.submitGraded(request), 201);
   });
 }

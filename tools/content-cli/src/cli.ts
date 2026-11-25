@@ -84,7 +84,7 @@ if (command === 'check') {
       frozen: values.frozen,
     });
     console.log(
-      `실행 검증 (${lookup.toolchain.version.raw}): 예제 ${String(stats.passed)}/${String(stats.examples)}, 출력 예측 ${String(stats.predictsPassed)}/${String(stats.predicts)} 통과, ${String(Math.round(performance.now() - started))}ms`,
+      `실행 검증 (${lookup.toolchain.version.raw}): 예제 ${String(stats.passed)}/${String(stats.examples)}, 출력 예측 ${String(stats.predictsPassed)}/${String(stats.predicts)}, 코드 작성 ${String(stats.codeExercisesPassed)}/${String(stats.codeExercises)} 통과, ${String(Math.round(performance.now() - started))}ms`,
     );
     if (stats.wrote) console.log(`실행 기대값을 갱신했습니다: ${stats.wrote}`);
   }

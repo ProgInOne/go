@@ -21,7 +21,7 @@ ProgInOne Go 저장소의 테스트 종류와 실행 방법입니다. 테스트 
 - CI의 `lint · typecheck · test · build` 검사는 `actions/setup-go`로 `.go-version`의 Go를 설치합니다. CI에서 Go를 찾지 못하면 테스트가 실패합니다.
 - 로컬에서 Go를 찾지 못하면 이 테스트를 건너뜁니다.
 - 첫 테스트는 빈 빌드 캐시에 표준 라이브러리를 컴파일하므로 몇 초 더 걸립니다.
-- 서버의 `/go` 라우트 테스트와 E2E의 `go-run.spec.ts`(레슨 실행 예제, 설정 > Go 실행 환경)도 실제 Go를 씁니다. CI의 `e2e · visual · a11y` 검사도 같은 방법으로 Go를 설치합니다.
+- 서버의 `/go` 라우트와 코드 문제 제출 테스트, content-cli의 실행 검증과 채점 테스트(`code-grading.test.ts`), E2E의 `go-run.spec.ts`(레슨 실행 예제, 설정 > Go 실행 환경)도 실제 Go를 씁니다. CI의 `e2e · visual · a11y` 검사도 같은 방법으로 Go를 설치합니다.
 
 ## E2E
 
