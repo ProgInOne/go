@@ -23,6 +23,8 @@ const USAGE = `사용법: content-cli <명령> [옵션]
   --strict       경고도 실패로 처리합니다
   --run          check: 실행 검증도 합니다
   --go <경로>    check --run: 쓸 go 실행 파일이나 그 폴더 (기본: PATH와 OS 표준 위치)
+  --frozen       check --run: 실행 기대값 파일(.generated/predict-expected.json)이 최신이
+                 아니면 쓰지 않고 실패합니다(CI용)
   --include-drafts
                  build에 검토되지 않은(draft) 문제도 넣습니다. 개발 전용이며
                  배포용 content.db에는 쓰지 않습니다`;
@@ -34,6 +36,7 @@ const { positionals, values } = parseArgs({
     out: { type: 'string', default: 'content/dist/content.db' },
     strict: { type: 'boolean', default: false },
     run: { type: 'boolean', default: false },
+    frozen: { type: 'boolean', default: false },
     go: { type: 'string' },
     'include-drafts': { type: 'boolean', default: false },
     help: { type: 'boolean', short: 'h', default: false },
@@ -57,6 +60,8 @@ function report(diagnostics: Diagnostics): boolean {
 if (command === 'check') {
   const result = checkContent(resolve(values.dir), {
     validateSpec: exerciseKit.validateSpec,
+    // --run computes the predict_output answer keys itself.
+    skipExpectations: values.run,
   });
   if (values.run) {
     const lookup = await findGoToolchain(
@@ -74,10 +79,14 @@ if (command === 'check') {
       maxConcurrent: 4,
     });
     const started = performance.now();
-    const stats = await runCheckContent(result, runner);
+    const stats = await runCheckContent(result, runner, {
+      root: resolve(values.dir),
+      frozen: values.frozen,
+    });
     console.log(
-      `실행 검증 (${lookup.toolchain.version.raw}): 예제 ${String(stats.examples)}개 중 ${String(stats.passed)}개 통과, ${String(Math.round(performance.now() - started))}ms`,
+      `실행 검증 (${lookup.toolchain.version.raw}): 예제 ${String(stats.passed)}/${String(stats.examples)}, 출력 예측 ${String(stats.predictsPassed)}/${String(stats.predicts)} 통과, ${String(Math.round(performance.now() - started))}ms`,
     );
+    if (stats.wrote) console.log(`실행 기대값을 갱신했습니다: ${stats.wrote}`);
   }
   process.exit(report(result.diagnostics) ? 1 : 0);
 }

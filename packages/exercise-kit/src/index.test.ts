@@ -18,12 +18,13 @@ const spec = {
 };
 
 describe('Go exercise registry', () => {
-  it('holds exactly the common choice types', () => {
+  it('holds the common choice types and the Go types', () => {
     expect(implementedExerciseTypes()).toEqual([...EXERCISE_TYPE_IDS]);
+    expect(EXERCISE_TYPE_IDS).toContain('predict_output');
   });
 
-  it('rejects types that need Go execution, which the skeleton does not have', () => {
-    expect(checkSpec('predict_output', {})).toMatchObject({ ok: false });
+  it('rejects run results: no type grades with one yet', () => {
+    expect(checkSpec('implement_function', {})).toMatchObject({ ok: false });
     expect(() =>
       gradeSubmission({
         typeId: 'mcq_single',

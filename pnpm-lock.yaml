@@ -345,6 +345,9 @@ importers:
       '@proginone/exercise-core':
         specifier: ^0.2.0
         version: 0.2.0
+      zod:
+        specifier: ^4.6.7
+        version: 4.6.7
 
   packages/go-runner: {}
 

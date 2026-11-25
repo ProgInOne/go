@@ -7,6 +7,8 @@
 
 ### Added
 
+- 출력 예측 문제 `predict_output`(G-003): 출력 전체를 적는 `output`과 보기를 고르는 `choice`("컴파일 오류"·"panic" 보기 포함). `content:check:run`이 프로그램을 두 시드로 실행해 정답을 `content/.generated/predict-expected.json`에 기록하고(결정론 확인), `check`·`build`가 채움. CI는 `--frozen`. 웹 렌더러(코드, 표준 입력, 출력 입력칸 또는 보기)
+- 문서: Go 코드 문제의 채점 세부(G-003)
 - 콘텐츠 실행 검증 `pnpm content:check:run`(G-002): 레슨 `<RunnableExample>`을 실제 Go로 컴파일·실행하고 gofmt 형식인지 검사(오류 없이 끝나야 하고, `expectError`는 컴파일 오류가 나야 함). CI에서 `.go-version`의 Go로 실행
 - 레슨 실행 예제(G-002): MDX `<RunnableExample lang="go">`(`id`, `predict`, `editable`, `expectError`)를 content-cli가 검사하고, 웹이 서버에서 실행해 출력·컴파일 오류·멈춘 이유·가상 시간을 보여 줌. 예측 후 실행, 코드 수정(Go 에디터, 처음 쓸 때 불러옴), "gofmt로 정리", 컴파일 오류 줄 표시
 - 설정 > Go 실행 환경: 찾은 Go 버전과 위치, 콘텐츠 검증 버전과 다를 때 안내, 설치 안내, 다시 찾기

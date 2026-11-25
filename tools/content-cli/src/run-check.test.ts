@@ -1,3 +1,4 @@
+import { readFileSync, writeFileSync } from 'node:fs';
 import { mkdtemp } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -39,7 +40,7 @@ describe.skipIf(lookup.status !== 'ok')('runCheckContent', () => {
     // The fixture's own notes (e.g. a pitfall without its misconception) are not ours.
     const before = result.diagnostics.items.length;
     expect(result.diagnostics.items.filter((d) => d.level === 'error')).toEqual([]);
-    const stats = await runCheckContent(result, runner);
+    const stats = await runCheckContent(result, runner, { root: result.source.root });
     return { stats, messages: result.diagnostics.items.slice(before).map((d) => d.message) };
   }
 
@@ -48,7 +49,7 @@ describe.skipIf(lookup.status !== 'ok')('runCheckContent', () => {
       `${example('sum', GOOD)}\n\n${example('unused', UNUSED, ' expectError')}`,
     );
     expect(messages).toEqual([]);
-    expect(stats).toEqual({ examples: 2, passed: 2 });
+    expect(stats).toMatchObject({ examples: 2, passed: 2 });
   });
 
   it('reports code gofmt would change, compile errors, panics and wrong expectError marks', async () => {
@@ -60,7 +61,7 @@ describe.skipIf(lookup.status !== 'ok')('runCheckContent', () => {
         example('fine', GOOD, ' expectError'),
       ].join('\n\n'),
     );
-    expect(stats).toEqual({ examples: 4, passed: 0 });
+    expect(stats).toMatchObject({ examples: 4, passed: 0 });
     expect(messages).toEqual([
       expect.stringMatching(
         /^<RunnableExample id="spaces"> \(\d+행\): gofmt 형식이 아닙니다\(코드 6번째 줄부터\)\. gofmt로 정리한 코드를 쓰세요$/,
@@ -75,5 +76,108 @@ describe.skipIf(lookup.status !== 'ok')('runCheckContent', () => {
         /^<RunnableExample id="fine"> \(\d+행\): expectError로 표시했지만 컴파일됩니다/,
       ),
     ]);
+  });
+
+  describe('predict_output', () => {
+    const PREDICT_YAML =
+      'courses/go-basics/modules/01-start/lessons/01-first-program/exercises/002-predict.yaml';
+    const predict = (spec: Record<string, unknown>, status = 'approved') =>
+      writeContent((files) => {
+        files[PREDICT_YAML] = {
+          id: 'go-basics.start.first-program.predict-sum',
+          type: 'predict_output',
+          difficulty: 2,
+          concepts: [{ id: 'go.basics.println', weight: 1 }],
+          estimatedSeconds: 60,
+          prompt: '무엇이 출력되나요?',
+          spec,
+          hints: ['a', 'b', 'c'],
+          explanation: '설명',
+          review:
+            status === 'approved'
+              ? { status, draftedBy: 'ai:claude', reviewedBy: 'ai:reviewer' }
+              : { status, draftedBy: 'ai:claude' },
+        };
+      });
+    const errorsOf = (root: string) =>
+      checkContent(root)
+        .diagnostics.items.filter((d) => d.file.includes('predict'))
+        .map((d) => `${d.level} ${d.message}`);
+
+    it('records the answer key from a real run, and check fills it in afterwards', async () => {
+      const root = predict({ code: GOOD, answerKind: 'output' });
+      expect(errorsOf(root)).toEqual([
+        'error 실행 기대값이 아직 없습니다. pnpm content:check:run으로 계산하세요',
+      ]);
+
+      const result = checkContent(root, { skipExpectations: true });
+      const stats = await runCheckContent(result, runner, { root });
+      expect(stats).toMatchObject({ predicts: 1, predictsPassed: 1, expectationsChanged: true });
+      expect(
+        JSON.parse(readFileSync(join(root, '.generated/predict-expected.json'), 'utf8')),
+      ).toMatchObject({
+        entries: {
+          'go-basics.start.first-program.predict-sum': {
+            expected: { kind: 'output', lines: ['합계: 7'] },
+          },
+        },
+      });
+
+      const after = checkContent(root);
+      expect(errorsOf(root)).toEqual([]);
+      const spec = after.source.courses[0]?.modules[0]?.lessons[0]?.exercises.find(
+        (x) => x.data.type === 'predict_output',
+      )?.data.spec;
+      expect(spec?.['expected']).toEqual({ kind: 'output', lines: ['합계: 7'] });
+
+      // Unchanged: a frozen run passes. Changed code: check says the key is stale.
+      const again = await runCheckContent(checkContent(root, { skipExpectations: true }), runner, {
+        root,
+        frozen: true,
+      });
+      expect(again.expectationsChanged).toBe(false);
+      const yaml = join(root, PREDICT_YAML);
+      writeFileSync(yaml, readFileSync(yaml, 'utf8').replace('3+4', '3+5'));
+      expect(errorsOf(root)).toEqual([
+        expect.stringContaining('error 코드가 바뀌어 실행 기대값이 낡았습니다'),
+      ]);
+      const frozen = checkContent(root, { skipExpectations: true });
+      await runCheckContent(frozen, runner, { root, frozen: true });
+      expect(frozen.diagnostics.items.map((d) => d.message)).toContainEqual(
+        expect.stringContaining('최신이 아닙니다'),
+      );
+    });
+
+    it('picks the choice that matches, compile errors included', async () => {
+      const root = predict({
+        code: UNUSED,
+        answerKind: 'choice',
+        choices: [
+          { id: 'a', text: '1' },
+          { id: 'b', text: '컴파일 오류가 난다', outcome: 'compile-error' },
+        ],
+      });
+      const stats = await runCheckContent(checkContent(root, { skipExpectations: true }), runner, {
+        root,
+      });
+      expect(stats.predictsPassed).toBe(1);
+      const after = checkContent(root);
+      const spec = after.source.courses[0]?.modules[0]?.lessons[0]?.exercises.find(
+        (x) => x.data.type === 'predict_output',
+      )?.data.spec;
+      expect(spec?.['expected']).toEqual({ kind: 'choice', choiceId: 'b' });
+    });
+
+    it('rejects programs whose result depends on randomness', async () => {
+      const code =
+        'package main\n\nimport "fmt"\n\nfunc main() {\n\tm := map[int]bool{1: true, 2: true, 3: true, 4: true, 5: true, 6: true, 7: true, 8: true}\n\tfor k := range m {\n\t\tfmt.Print(k)\n\t}\n}';
+      const root = predict({ code, answerKind: 'output' }, 'draft');
+      const result = checkContent(root, { skipExpectations: true });
+      const stats = await runCheckContent(result, runner, { root });
+      expect(stats.predictsPassed).toBe(0);
+      expect(result.diagnostics.items.map((d) => d.message)).toContainEqual(
+        expect.stringContaining('실행할 때마다 결과가 다릅니다'),
+      );
+    });
   });
 });

@@ -73,9 +73,10 @@ jobs:
       - name: Content check
         run: pnpm content:check
 
-      # Lesson examples compile, run and are gofmt-formatted with the pinned Go (G-002).
+      # Lesson examples and predict_output programs run with the pinned Go (G-002, G-003); the
+      # recorded answer keys must be up to date.
       - name: Content run check
-        run: pnpm content:check:run
+        run: pnpm content:check:run --frozen
 
       - name: Build
         run: pnpm build

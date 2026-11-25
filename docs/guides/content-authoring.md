@@ -6,12 +6,12 @@ Go 과정의 콘텐츠를 쓰고 검사하고 `content.db`로 빌드하는 방�
 
 ## 지금 쓸 수 있는 것
 
-레슨의 실행 예제는 학습자의 Go로 로컬 서버에서 실행합니다([G-002](/docs/decisions.md#g-002-go-코드-실행과-채점--확정)). 코드를 채점하는 문제 유형은 아직 없어서, 문제는 선택형만 씁니다.
+레슨의 실행 예제는 학습자의 Go로 로컬 서버에서 실행합니다([G-002](/docs/decisions.md#g-002-go-코드-실행과-채점--확정)). 문제는 선택형과 출력 예측(`predict_output`)을 씁니다. 코드를 직접 쓰는 문제는 다음 단계에서 더합니다([G-003](/docs/decisions.md#g-003-go-코드-문제의-채점-세부--확정)).
 
 | 항목 | 지금 | 이유 |
 |---|---|---|
 | 레슨 본문 | MDX. 읽기만 하는 코드는 ` ```go ` 펜스 코드 블록, 실행하는 코드는 `<RunnableExample>` | |
-| 문제 유형 | `mcq_single`, `mcq_multi`, `true_false` | 공통 선택형만 등록됨(`packages/exercise-kit`) |
+| 문제 유형 | `mcq_single`, `mcq_multi`, `true_false`, `predict_output` | 코드를 쓰는 유형은 G-003 순서대로 더함(`packages/exercise-kit`) |
 | `usage` | `practice`, `check`(본문의 이해도 확인), `assessment`, `worked_example` | `try`와 `project`는 코드 채점이 필요함 |
 | 단원 종류 | `lesson`, `assessment` | `project`는 코드 채점이 필요함 |
 | 문제 템플릿(`templates/`) | 쓸 수 없음 | Go 템플릿 형식은 Go 전용 설계에서 정함 |
@@ -52,6 +52,36 @@ func main() {
 
 섹션 종류는 JavaScript 저장소와 같습니다. 다만 `walkthrough` 섹션은 실행 결과가 아니라 예제를 한 줄씩 따라가는 해설로 씁니다. 화면 제목은 "단계별 해설"이고, 레슨 화면에서는 `examples`와 함께 "예제 따라가기" 단계로 묶입니다.
 
+### 출력 예측 문제
+
+`predict_output`은 프로그램이 무엇을 출력하는지 예측하는 문제입니다([G-003](/docs/decisions.md#g-003-go-코드-문제의-채점-세부--확정)).
+
+```yaml
+type: predict_output
+spec:
+  code: |
+    package main
+
+    import "fmt"
+
+    func main() {
+    	fmt.Println("합계:", 3+4)
+    }
+  answerKind: output          # 출력 전체를 적게 함. choice면 보기를 고르게 함
+  # stdin: "고퍼\n"           # 프로그램이 읽을 표준 입력(선택)
+  # choices:                  # answerKind: choice일 때
+  #   - { id: a, text: '`합계: 7`' }
+  #   - { id: b, text: 컴파일 오류가 난다, outcome: compile-error }   # 또는 outcome: panic
+  misconceptionByAnswer:      # 흔한 오답(출력 텍스트, choice면 보기 ID) → 오개념
+    '합계: 3+4': go.mc.expr-printed-as-text
+```
+
+- `code`는 `package main`과 `func main()`이 있는 완전한 프로그램이고, gofmt 형식이어야 합니다.
+- 정답(`spec.expected`)은 쓰지 않습니다. `pnpm content:check:run`이 실제로 실행해 `content/.generated/predict-expected.json`에 기록하고, `check`와 `build`가 그 값을 씁니다. 코드를 고치면 다시 실행해 이 파일도 함께 커밋합니다. 승인된 문제에 최신 기대값이 없으면 오류입니다.
+- 실행할 때마다 결과가 같아야 합니다. 맵을 순회하며 출력하거나 난수를 출력하는 코드는 쓸 수 없습니다.
+- `output` 문제의 프로그램은 정상으로 끝나야 합니다. 컴파일 오류나 panic을 묻고 싶으면 `choice`로 쓰고, 그 결과를 뜻하는 보기에 `outcome`을 붙입니다. `choice`에서는 실제 결과와 맞는 보기가 정확히 하나여야 합니다.
+- 보기 텍스트는 Markdown 인라인입니다. 출력은 백틱으로 감쌉니다.
+
 ## 디렉터리 구조
 
 ```text
@@ -77,7 +107,8 @@ content/
 
 ```shell
 pnpm content:check       # 스키마, 참조 무결성, 문제 스펙, 섹션 규칙 검사
-pnpm content:check:run   # 위 검사 + 레슨 실행 예제를 실제 Go로 실행하고 gofmt 형식 확인(Go 1.22 이상 필요)
+pnpm content:check:run   # 위 검사 + 레슨 실행 예제와 출력 예측 문제를 실제 Go로 실행(Go 1.22 이상 필요)
+                         # 출력 예측의 기대값 파일을 갱신. --frozen이면 갱신 대신 실패(CI)
 pnpm content:build       # 승인된 문제만 content/dist/content.db로 빌드하고 공개 slug 목록 갱신
 pnpm content:build:dev   # 개발용: 검토 전(draft) 문제도 포함
 ```
