@@ -1,0 +1,23 @@
+{
+  "v": 1,
+  "entries": {
+    "go-basics.start.first-program.predict-call-order": {
+      "inputHash": "7fea8dbdd65becbc5ef8824b9e4724bd185eecfa818d71341aa783ce9bdacbbf",
+      "expected": {
+        "kind": "output",
+        "lines": [
+          "시작",
+          "안녕",
+          "끝"
+        ]
+      }
+    },
+    "go-basics.start.variables.predict-redeclare": {
+      "inputHash": "513a4637647ca477daf1cb1eb73cf502ddfde9a568f981f676529f96347df902",
+      "expected": {
+        "kind": "choice",
+        "choiceId": "d"
+      }
+    }
+  }
+}

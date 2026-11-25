@@ -1,0 +1,47 @@
+id: go-basics.start.first-program.predict-call-order
+type: predict_output
+difficulty: 2
+concepts:
+  - { id: go.basics.program-structure, weight: 1 }
+  - { id: go.basics.println, weight: 0.5 }
+tags: [main, println, output]
+estimatedSeconds: 90
+prompt: 아래 프로그램이 출력하는 내용을 그대로 적어 보세요.
+spec:
+  code: |
+    package main
+
+    import "fmt"
+
+    func greet() {
+    	fmt.Println("안녕")
+    }
+
+    func main() {
+    	fmt.Println("시작")
+    	greet()
+    	fmt.Println("끝")
+    }
+  answerKind: output
+  misconceptionByAnswer:
+    "안녕\n시작\n끝": go.mc.top-function-runs-first
+misconceptions: [go.mc.top-function-runs-first]
+hints:
+  - 실행은 어느 함수에서 시작하나요?
+  - '`main` 안의 문장을 위에서부터 하나씩 따라가 보세요.'
+  - '`greet()`를 만나면 `greet` 안의 문장이 실행되고, 끝나면 `main`으로 돌아와요.'
+explanation: |
+  출력은 세 줄이에요.
+
+  ```text
+  시작
+  안녕
+  끝
+  ```
+
+  실행은 `main`에서 시작해요. `greet`는 파일 위쪽에 있어도 `main`이 `greet()`로 부를 때 실행되고, 끝나면 다음 문장 `fmt.Println("끝")`으로 돌아와요.
+origin: authored
+review:
+  status: approved
+  draftedBy: ai:claude
+  reviewedBy: ai:reviewer

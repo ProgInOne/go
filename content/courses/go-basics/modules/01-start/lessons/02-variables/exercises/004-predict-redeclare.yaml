@@ -1,0 +1,41 @@
+id: go-basics.start.variables.predict-redeclare
+type: predict_output
+difficulty: 2
+concepts:
+  - { id: go.vars.short-declaration, weight: 1 }
+tags: [short-declaration, compile-error]
+estimatedSeconds: 60
+prompt: 아래 프로그램을 실행하면 어떻게 되나요?
+spec:
+  code: |
+    package main
+
+    import "fmt"
+
+    func main() {
+    	score := 10
+    	score := 20
+    	fmt.Println(score)
+    }
+  answerKind: choice
+  choices:
+    - { id: a, text: '`20`을 출력한다' }
+    - { id: b, text: '`10`을 출력한다' }
+    - { id: c, text: '`10`과 `20`을 차례로 출력한다' }
+    - { id: d, text: 컴파일 오류가 나서 실행되지 않는다, outcome: compile-error }
+  misconceptionByAnswer:
+    a: go.mc.short-decl-reassigns
+misconceptions: [go.mc.short-decl-reassigns]
+hints:
+  - '`:=`는 무엇을 하는 기호인가요?'
+  - 이미 있는 변수의 값을 바꿀 때 쓰는 기호와 비교해 보세요.
+  - 같은 이름의 새 변수를 같은 범위에서 또 만들 수 있을까요?
+explanation: |
+  컴파일 오류가 나서 실행되지 않아요.
+
+  `score := 20`은 새 변수를 만들려고 하지만, 같은 범위에 `score`가 이미 있고 왼쪽에 새 변수가 하나도 없어서 `no new variables on left side of :=` 오류가 나요. 값을 바꾸려면 `score = 20`처럼 `=`를 써요.
+origin: authored
+review:
+  status: approved
+  draftedBy: ai:claude
+  reviewedBy: ai:reviewer

@@ -42,6 +42,10 @@ fmt.Println(count)
 </Section>
 
 <Section kind="examples">
+실행하기 전에 무엇이 출력될지 먼저 적어 보세요.
+
+<RunnableExample id="price" lang="go" predict>
+
 ```go
 package main
 
@@ -54,7 +58,7 @@ func main() {
 }
 ```
 
-출력은 `가격: 1500`이에요.
+</RunnableExample>
 </Section>
 
 <Section kind="walkthrough">
@@ -69,6 +73,24 @@ func main() {
 <Actual>같은 범위에서 새 변수 없이 `:=`를 쓰면 `no new variables on left side of :=` 컴파일 오류가 나요.</Actual>
 <Right>값을 바꿀 때는 `x = 2`처럼 `=`를 써요.</Right>
 </Pitfall>
+
+아래 프로그램을 실행해서 컴파일러가 어떤 오류 메시지를 내는지 직접 읽어 보세요. 몇 번째 줄의 무엇이 문제인지 메시지에 나와 있어요.
+
+<RunnableExample id="redeclare" lang="go" expectError>
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	x := 1
+	x := 2
+	fmt.Println(x)
+}
+```
+
+</RunnableExample>
 
 <Pitfall misconception="go.mc.unused-variable-ok">
 <Wrong>선언만 하고 쓰지 않은 변수는 그냥 무시된다.</Wrong>
@@ -96,5 +118,5 @@ Go는 쓰지 않는 변수와 import를 오류로 막아서, 지우는 것을 �
 </Section>
 
 <Section kind="next">
-이 과정은 뼈대용 예시라 여기까지예요. Go 코드를 직접 실행하는 실습은 Go 전용 설계 이후에 더해요.
+이 과정은 뼈대용 예시라 여기까지예요.
 </Section>
